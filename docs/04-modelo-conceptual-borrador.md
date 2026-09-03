@@ -159,6 +159,20 @@
 
 ## 4. Relaciones y cardinalidades
 
+## 4. Relaciones y cardinalidades
+
+## |Codigo|Relacion propuesta|Cardinalidad (min/max)|Descripcion|
+## |---|---------------------------------------|--------------------------------|-------------------------------------------------------------------------------------------------------|
+## |R01| Proveedor—[suministra]—LoteLeche | Proveedor(0:N)—LoteLeche(1)|Un proveedor puede suministrar varios lotes de leche; cada lote de leche tiene un proveedor de origen. |
+## |R02| Silo—[contiene]—LoteLeche| Silo (0:N) — LoteLeche (0:N)| Un silo puede contener leche de varios lotes y un lote puede pasar por uno o más silos durante su ciclo. |
+## |R03| LoteProduccion—[utiliza]—Tanque| LoteProduccion(N)—Tanque(0:N)     | Un lote puede utilizar uno o mas tanques según sus etapas; un tanque puede procesar múltiples lotes en diferentes momentos. |
+## |R04| Empleado—[supervisa]—LoteProduccion| Empleado (0:N)—LoteProducción (1)| Un empleado puede supervisar varios lotes; cada lote tiene un supervisor responsable durante su ciclo. |
+## |R05| LoteProduccion—[consume]—LoteInsumo | LoteProduccion (0:N) — LoteInsumo (0:N) | Un lote puede consumir cultivos; un lote de insumo puede consumirse parcialmente en varios lotes de produccion. |
+## |R06| Insumo — [identifica] — LoteInsumo | Insumo (0:N) — LoteInsumo (1) | Un tipo de insumo puede recibirse en múltiples lotes; cada lote de insumo corresponde a un solo insumo. |
+## |R07| LoteProduccion—[tiene]—PruebaCalidad | LoteProduccion (0:N)—PruebaCalidad (1) | Un lote de producción puede tener varias pruebas de calidad; cada prueba se asocia a un lote. |
+## |R08| Empleado —[registra]—PruebaCalidad | Empleado (0:N) — PruebaCalidad (0:1) | Un empleado puede registrar muchas pruebas, una prueba manual puede tener un empleado responsable, mientras que una prueba automatica puede originarse en un sensor. |
+## |R09| LoteProduccion—[envasa]—Envasado | LoteProduccion (0:N) — Envasado (1) | Un lote puede generar uno o varios registros de envasado; cada registro de envasado corresponde a un lote de producción. |
+## | R10 | LoteProducción —[generar]—Descarte | LoteProducción (0:1) — Descarte (1) | Un lote puede no ser descartado o generar un descarte; cada descarte corresponde a un solo lote. |
 
 
 ## 5. Relaciones M:N y entidades asociativas
