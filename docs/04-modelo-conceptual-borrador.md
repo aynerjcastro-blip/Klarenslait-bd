@@ -16,7 +16,7 @@
 ## | Entidad           |Tipo   |Descripcion conceptual|
 ## |-------------------|-------|-----------------------|
 ## | Proveedor         |Fuerte |Persona, finca o empresa que suministra leche cruda u otros insumos a la planta. |
-## | LoteLeche    |Fuerte |Cantidad identificable de leche recibida, con volumen, origen, estado y dictamen de calidad. |
+## | LoteLeche         |Fuerte |Cantidad identificable de leche recibida, con volumen, origen, estado y dictamen de calidad. |
 ## | Silo              |Fuerte |Contenedor físico de recepción o acopio de leche, con capacidad máxima y estado operativo. |
 ## | Tanque            |Fuerte |Equipo físico donde se procesa un lote de producción; puede corresponder a fermentación o mezcla. |
 ## | LoteProducción    |Fuerte |Unidad trazable de yogurt elaborada durante un ciclo de producción. |
