@@ -174,7 +174,3 @@
 ## |R09| LoteProduccion—[envasa]—Envasado | LoteProduccion (0:N) — Envasado (1) | Un lote puede generar uno o varios registros de envasado; cada registro de envasado corresponde a un lote de producción. |
 ## | R10 | LoteProducción —[generar]—Descarte | LoteProducción (0:1) — Descarte (1) | Un lote puede no ser descartado o generar un descarte; cada descarte corresponde a un solo lote. |
 
-
-## 5. Relaciones M:N y entidades asociativas
-## 6. Posibles especializaciones o generalizaciones
-## 7. Reglas de negocio que afectan al modelo
