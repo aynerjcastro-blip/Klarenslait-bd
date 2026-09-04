@@ -162,7 +162,7 @@
 ## 4. Relaciones y cardinalidades
 
 ## |Codigo|Relacion propuesta|Cardinalidad (min/max)|Descripcion|
-## |---|---------------------------------------|--------------------------------|-------------------------------------------------------------------------------------------------------|
+## |---|---------------------------------------|--------------------------------|----------------------------------------------------------------------------------------------|
 ## |R01| Proveedor—[suministra]—LoteLeche | Proveedor(0:N)—LoteLeche(1)|Un proveedor puede suministrar varios lotes de leche; cada lote de leche tiene un proveedor de origen. |
 ## |R02| Silo—[contiene]—LoteLeche| Silo (0:N) — LoteLeche (0:N)| Un silo puede contener leche de varios lotes y un lote puede pasar por uno o más silos durante su ciclo. |
 ## |R03| LoteProduccion—[utiliza]—Tanque| LoteProduccion(N)—Tanque(0:N)     | Un lote puede utilizar uno o mas tanques según sus etapas; un tanque puede procesar múltiples lotes en diferentes momentos. |
