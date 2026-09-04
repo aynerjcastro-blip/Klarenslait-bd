@@ -159,8 +159,6 @@
 
 ## 4. Relaciones y cardinalidades
 
-## 4. Relaciones y cardinalidades
-
 ## |Codigo|Relacion propuesta|Cardinalidad (min/max)|Descripcion|
 ## |---|---------------------------------------|--------------------------------|----------------------------------------------------------------------------------------------|
 ## |R01| Proveedor—[suministra]—LoteLeche | Proveedor(0:N)—LoteLeche(1)|Un proveedor puede suministrar varios lotes de leche; cada lote de leche tiene un proveedor de origen. |
