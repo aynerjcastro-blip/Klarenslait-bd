@@ -83,10 +83,8 @@
 ## En el modelo conceptual inicial se propone conservar una sola entidad y usar el atributo `rol`, porque los datos básicos de identificación son comunes. La regla de que solo el técnico de calidad registra pruebas de laboratorio se controla desde las reglas de negocio y permisos.
 
 ## 7. Reglas de negocio que afectan al modelo
-
-
 ## | Regla del Módulo 3 | Impacto en el modelo conceptual |
-## |---|---|
+## |---                 |---                              |
 ## | RN-01: leche con análisis microbiológico rechazado no puede asignarse a tanque/lote | Se requieren `LoteLecheCruda`, `PruebaCalidad`, `Silo`, `Tanque` y `AsignaciónLecheTanque`. |
 ## | RN-02: un insumo vencido no puede usarse | `LoteInsumo` debe incluir fechaCaducidad, cantidadDisponible y relación con `ConsumoInsumo`. |
 ## | RN-03: lote rechazado no puede envasarse | `LoteProducción` necesita estado/dictamen, y `Envasado` se relaciona con el lote aprobado. |
