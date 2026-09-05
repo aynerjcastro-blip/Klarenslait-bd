@@ -20,7 +20,7 @@
 ## | Silo              |Fuerte |Contenedor físico de recepción o acopio de leche, con capacidad máxima y estado operativo. |
 ## | Tanque            |Fuerte |Equipo físico donde se procesa un lote de producción; puede corresponder a fermentación o mezcla. |
 ## | LoteProducción    |Fuerte |Unidad trazable de yogurt elaborada durante un ciclo de producción. |
-## | Insumo            |Debil  |Tipo de materia prima adicional utilizada en producción, como cultivo láctico o pulpa de fruta, etc. 
+## | Insumo            |Fuerte |Tipo de materia prima adicional utilizada en producción, como cultivo láctico o pulpa de fruta, etc. 
 ## | LoteInsumo        |Fuerte |Unidad identificable de un insumo recibido, con cantidad disponible y fecha de caducidad. |
 ## | PruebaCalidad     |Fuerte |Registro de una prueba aplicada a leche, lote de producción,como microbiología, pH o temperatura.                                   
 ## | Empleado          |Fuerte |Persona que interviene como operario, supervisor o técnico de calidad. |
@@ -157,6 +157,17 @@
 ## - loteAfectado
 
 
+## LoteInsumo
+## - PK_loteInsumo
+## - codigoLoteInsumo
+## - fechaRecepcion
+## - fechaCaducidad
+## - cantidadInicial
+## - cantidadDisponible
+## - estado
+
+
+
 ## 4. Relaciones y cardinalidades
 
 ## |Codigo|Relacion propuesta|Cardinalidad (min/max)|Descripcion|
@@ -169,6 +180,6 @@
 ## |R06| Insumo — [identifica] — LoteInsumo | Insumo (0:N) — LoteInsumo (1) | Un tipo de insumo puede recibirse en múltiples lotes; cada lote de insumo corresponde a un solo insumo. |
 ## |R07| LoteProduccion—[tiene]—PruebaCalidad | LoteProduccion (0:N)—PruebaCalidad (1) | Un lote de producción puede tener varias pruebas de calidad; cada prueba se asocia a un lote. |
 ## |R08| Empleado —[registra]—PruebaCalidad | Empleado (0:N) — PruebaCalidad (0:1) | Un empleado puede registrar muchas pruebas, una prueba manual puede tener un empleado responsable, mientras que una prueba automatica puede originarse en un sensor. |
-## |R09| LoteProduccion—[envasa]—Envasado | LoteProduccion (0:N) — Envasado (1) | Un lote puede generar uno o varios registros de envasado; cada registro de envasado corresponde a un lote de producción. |
-## | R10 | LoteProducción —[generar]—Descarte | LoteProducción (0:1) — Descarte (1) | Un lote puede no ser descartado o generar un descarte; cada descarte corresponde a un solo lote. |
+## |R09| LoteProduccion—[envasa]—Envasado | LoteProduccion (0:N) — Envasado (0:N) | Un lote puede generar uno o varios registros de envasado; cada registro de envasado corresponde a un lote de producción. |
+## |R10| LoteProducción —[generar]—Descarte | LoteProducción (0:1) — Descarte (1) | Un lote puede no ser descartado o generar un descarte; cada descarte corresponde a un solo lote. |
 
