@@ -25,7 +25,7 @@
 ## | PruebaCalidad     |Fuerte |Registro de una prueba aplicada a leche, lote de producción,como microbiología, pH o temperatura.                                   
 ## | Empleado          |Fuerte |Persona que interviene como operario, supervisor o técnico de calidad. |
 ## | Envasado          |Fuerte |Registro del proceso final de empaque de un lote aprobado, incluyendo fecha y canal de destino. |
-## | Asignacion_Tanque |Asociativa |Registra el volumen de leche transferido desde un silo hacia un tanque para un lote de producción. |
+## | Asigna            |Asociativa |Registra el volumen de leche transferido desde un silo hacia un tanque para un lote de producción. |
 ## | ConsumoInsumo     |Asociativa |Registra el consumo parcial de un lote de insumo en un lote de producción. |
 ## | UsoTanque         |Asociativa/temporal | Registra qué lote ocupó un tanque, con fecha y hora de inicio y finalización. |
 ## | Descarte          |Debil |Registra el descarte de un lote, con fecha, motivo y volumen descartado. |
@@ -122,8 +122,8 @@
 ## - estado   
 
 
-### AsignacionTanque
-## - PK_idAsignacion
+### Asigna
+## - PK_idAsigna
 ## - fechaHora
 ## - volumenAsignado
 ## - siloOrigen
