@@ -84,10 +84,8 @@
 ### Insumo
 ## - PK_idInsumo
 ## - codigo
-## - fechaRecepcion
-## - fechaCaducidad
-## - cantidadInicial
-## - cantidadDisponible
+## - categoriaInsumo
+## - UnidadDeMedida
 ## - estado
 
 ### PruebaCalidad
