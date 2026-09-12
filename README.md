@@ -153,18 +153,15 @@ Permite partir de un lote de leche o de una recepción y conocer:
 KlarensLait/
 │
 ├── README.md
-├── docs/
-│   └──
 │
 ├── diagrams/
 │   └── 
 │
-├── database/
+├── docs/
 │   └── 
 │
-├── assets/
+├── sql/
 │   └── 
-│
 └── LICENSE
 
 La estructura puede modificarse durante el desarrollo si el equipo identifica una forma más clara de organizar los artefactos.
