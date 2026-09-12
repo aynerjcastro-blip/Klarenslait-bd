@@ -1,5 +1,7 @@
 # Interrogatorio, Supuestos y Reglas de Negocio
 
+
+
 ## 1\. Preguntas y decisiones de diseño
 
 |#|Pregunta|Decisión|Justificación|Impacto en el diseño|
