@@ -95,8 +95,8 @@
 ## - parámetroMedido
 ## - valorObtenido
 ## - unidadMedida
-<!-- ## - valorMínimoPermitido -->
-## - valorMáximoPermitido
+## - valorMínimoPermitido 
+## - valorMaximoPermitido
 ## - resultado
 ## - origenRegistro
 ## - responsableRegistro
