@@ -95,7 +95,7 @@ Derivado del Módulo 4 (entidades, atributos y relaciones), con los dominios, su
 |---|---|---|
 | <u>id_estandar</u> | PK | |
 | parametro | | ph, temperatura, acidez_dornic, grasa, viscosidad o microorganismos (Módulo 3, 1.6) |
-| tipo_producto | | |
+| tipo_producto | | Obligatorio: leche_cruda, yogurt, queso, suero, avena o leche_uht |
 | unidad_medida | | Unidad del parámetro; viene de prueba_calidad (decisión D8) |
 | etapa | | Obligatoria: recepcion, fermentacion, mezcla o envasado (Módulo 3, 1.6) |
 | valor_minimo_permitido | | |
@@ -239,8 +239,10 @@ Las cuatro llevan clave primaria propia, como las define el Módulo 4. Los atrib
 | estandar_calidad | etapa NOT NULL: recepcion, fermentacion, mezcla o envasado | Decisión del grupo (D9) y Módulo 3 (1.6) |
 | estandar_calidad | parametro: ph, temperatura, acidez_dornic, grasa, viscosidad o microorganismos | Módulo 3 (1.6) |
 | estandar_calidad | Único (parametro, tipo_producto, etapa) | Decisión del grupo (D9) y RN-04 (un rango por parámetro, producto y etapa) |
+| estandar_calidad | tipo_producto: leche_cruda, yogurt, queso, suero, avena o leche_uht. Se agregó leche_cruda para los estándares de recepción, para que la unicidad no dependa de un valor nulo | Decisión del grupo (pendiente de confirmar) |
 | descarte | motivo, volumen_descartado y fecha_hora_descarte obligatorios; volumen_descartado mayor que 0 | RN-05 |
 | uso_tanque | Índice único parcial sobre id_tanque donde fecha_hora_fin es nula: un solo uso activo por tanque | RN-06 |
+| uso_tanque | Segundo índice único parcial sobre id_lote_produccion donde fecha_hora_fin es nula: un solo tanque activo por lote | RN-06 y supuesto 2 (el lote cambia de tanque en secuencia) |
 | tanque | capacidad_maxima mayor que 0; volumen_actual entre 0 y capacidad_maxima | RN-07 (parte declarativa) |
 | silo | capacidad_maxima mayor que 0; volumen_actual entre 0 y capacidad_maxima | Dominio: capacidades y volúmenes positivos, y volumen_actual no mayor que la capacidad (RN-07 solo habla del tanque) |
 | lote_insumo | 0 menor o igual a cantidad_disponible, y esta menor o igual a cantidad_inicial | RN-10 |
@@ -326,8 +328,8 @@ Las 19 claves foráneas del esquema tienen política y justificación propia.
 | proveedor, silo, tanque, insumo, empleado | Cumple 3FN | Todo atributo depende solo de la clave. |
 | lote_leche | Cumple 3FN | volumen_disponible_litros se puede calcular (inicial menos lo usado); se conserva como estado operativo y debe mantenerse coherente. |
 | lote_insumo | Cumple 3FN | Fechas y cantidades varían por recepción, por eso viven aquí y no en insumo. cantidad_disponible se puede calcular igual que arriba. |
-| estandar_calidad | Cumple 3FN, con una salvedad | El rango depende de (parametro, tipo_producto, etapa), no de ninguna prueba. Salvedad: unidad_medida depende de parametro, que no es la clave, así que en sentido estricto es una dependencia transitiva. Se acepta por ser un catálogo pequeño; la solución estricta sería una tabla parametro. |
-| lote_produccion | Cumple 3FN | tipo_producto queda como atributo (el alcance es solo yogur). |
+| estandar_calidad | No cumple 3FN estricta | El rango depende de (parametro, tipo_producto, etapa), no de ninguna prueba. Pero unidad_medida depende de parametro, que no es la clave: es una dependencia transitiva. Se acepta por ser un catálogo pequeño y fijo; la solución estricta sería una tabla parametro con su unidad. |
+| lote_produccion | Cumple 3FN | tipo_producto queda como atributo. El dominio del Módulo 3 lista cinco productos, aunque la fase 1 opera solo con yogur; el grupo debe alinear los Módulos 1, 4 y 5 con una de las dos versiones. |
 | envasado | Cumple 3FN | Todos los datos describen el envasado. |
 | descarte | Cumple 3FN | La clave es la del lote y el resto depende solo de ella. |
 | almacena, uso_tanque, consumo_insumo, asigna | Cumplen 3FN | Los atributos describen el evento completo, no a una sola de las entidades. |
@@ -350,18 +352,18 @@ Son los mecanismos que no se pueden expresar solo con CHECK o claves foráneas, 
 | Regla | Tabla y momento | Qué verifica | Si no se cumple |
 |---|---|---|---|
 | RN-01 | BEFORE INSERT en almacena | lote_leche.dictamen_microbiologico del id_lote_leche debe ser aprobado | Rechaza el registro: la leche sin dictamen aprobado no entra a un silo |
-| RN-01 (dictamen derivado, D12) | AFTER INSERT en prueba_calidad con id_lote_leche y tipo_prueba microbiologica | Deriva el dictamen del lote de leche (Módulo 3, 1.2): sin pruebas queda pendiente; cualquier prueba rechazado da rechazado; ninguna rechazado y al menos una aprobado da aprobado | Actualiza lote_leche.dictamen_microbiologico; si queda rechazado, estado_lote pasa a rechazado. El dictamen no se edita a mano |
+| RN-01 (dictamen derivado, D12) | AFTER INSERT en prueba_calidad con id_lote_leche y tipo_prueba microbiologica | Deriva el dictamen del lote de leche (Módulo 3, 1.2): sin pruebas queda pendiente; cualquier prueba rechazado da rechazado; ninguna rechazado y al menos una aprobado da aprobado. Una prueba con resultado reproceso no cambia el dictamen | Actualiza lote_leche.dictamen_microbiologico; si queda rechazado, estado_lote pasa a rechazado aunque el lote estuviera disponible (ver transiciones). El dictamen no se edita a mano |
 | RN-02 | BEFORE INSERT en consumo_insumo | La fecha de fecha_hora_consumo debe ser menor o igual a lote_insumo.fecha_caducidad | Rechaza el consumo de un insumo vencido |
 | RN-03 | BEFORE INSERT en envasado | lote_produccion.estado del id_lote_produccion debe ser aprobado | Rechaza el envasado de un lote que no está aprobado |
 | RN-03 (cierre del envasado, D11) | BEFORE UPDATE de estado en lote_produccion | El paso a envasado exige al menos un envasado cerrado y ninguno abierto, y lo hace el Supervisor al cerrar el envasado. Después el lote ya no admite más registros de envasado | Rechaza el cambio de estado |
 | RN-04 | No lleva trigger en el Módulo 3. Una vista sobre prueba_calidad y estandar_calidad | Detecta las mediciones de un parámetro fuera de [valor_minimo_permitido, valor_maximo_permitido] durante 15 minutos o más seguidos | No bloquea nada: la vista muestra la alerta. La parte declarativa es el CHECK de mínimo menor o igual a máximo en estandar_calidad |
-| RN-06 | Trigger de respaldo en uso_tanque | Valida el traslado entre tanques: al abrir el uso del tanque de mezcla se cierra el del tanque de fermentación | Rechaza el uso que dejaría dos usos activos. La parte declarativa es el índice único parcial |
+| RN-06 | Trigger de respaldo en uso_tanque | Valida el traslado entre tanques: en la misma transacción se cierra primero el uso del tanque de fermentación y luego se abre el del tanque de mezcla. Los dos índices únicos parciales (uno por tanque y otro por lote) impiden dos usos activos | Rechaza el uso que dejaría dos usos activos del tanque o del lote |
 | RN-07 | BEFORE INSERT en asigna | Suma volumen_asignado_litros de las asignaciones del lote activo a ese tanque, más la nueva; no puede superar tanque.capacidad_maxima | Rechaza la asignación |
-| RN-08 | BEFORE DELETE en lote_produccion y en prueba_calidad | Compara la fecha actual con el inicio del plazo más 365 días. Lote de producción y sus pruebas: desde el cierre (fecha_hora_envasado del último envasado, o fecha_hora_descarte si fue descartado). Pruebas de un lote de leche, que no tiene cierre de producción: desde lote_leche.fecha_recepcion (supuesto 17) | Rechaza el borrado antes de cumplirse el plazo. Se refuerza con las FK en RESTRICT y un rol de la aplicación sin privilegio DELETE |
+| RN-08 | BEFORE DELETE en lote_produccion, prueba_calidad, envasado, descarte, uso_tanque, consumo_insumo y asigna | Compara la fecha actual con el inicio del plazo más 365 días. Lote de producción y todo lo que cuelga de él: desde el cierre (fecha_hora_envasado del último envasado, o fecha_hora_descarte si fue descartado). Pruebas de un lote de leche, que no tiene cierre de producción: desde lote_leche.fecha_recepcion (supuesto 17) | Rechaza el borrado antes de cumplirse el plazo. RESTRICT solo protege al padre, no a los hijos; por eso el trigger cubre también las tablas hijas y el rol de la aplicación no tiene privilegio DELETE sobre ninguna de las tablas del esquema |
 | RN-09 | BEFORE INSERT en prueba_calidad | Lee empleado.cargo del id_responsable_registro según tipo_prueba: las pruebas de laboratorio (microbiologica, fisicoquimica) solo las registra un tecnico_calidad; la validación manual en línea (ph_linea, temperatura_linea), un operador_tanque o un tecnico_calidad; la medición del sensor no lleva empleado | Rechaza el registro. La parte declarativa es el CHECK entre origen_registro e id_responsable_registro |
 | RN-10 | BEFORE INSERT en consumo_insumo | cantidad_consumida no puede superar lote_insumo.cantidad_disponible; si es válida, se descuenta de cantidad_disponible | Rechaza el consumo; el CHECK entre 0 e inicial lo respalda |
 | RN-12 | BEFORE INSERT en asigna | Existe un uso_tanque con el mismo id_tanque_destino e id_lote_produccion y fecha_hora_fin nula | Rechaza la asignación sin uso activo del tanque |
-| Estándar de la prueba | BEFORE INSERT en prueba_calidad | Si la prueba es de un lote de producción, estandar_calidad.tipo_producto debe ser igual a lote_produccion.tipo_producto. Si es de un lote de leche, la etapa del estándar debe ser recepcion | Rechaza la prueba |
+| Estándar de la prueba | BEFORE INSERT en prueba_calidad | (1) Coherencia con el tipo de prueba: ph_linea exige un estándar con parametro ph; temperatura_linea, temperatura; microbiologica, microorganismos; fisicoquimica, ph, acidez_dornic, grasa o viscosidad. (2) Si la prueba es de un lote de producción, estandar_calidad.tipo_producto debe ser igual a lote_produccion.tipo_producto. (3) Si es de un lote de leche, el estándar debe tener etapa recepcion y tipo_producto leche_cruda | Rechaza la prueba |
 | Mínimos (1,N) de lote_produccion | Trigger de restricción diferido (DEFERRABLE INITIALLY DEFERRED) sobre lote_produccion, al confirmar la transacción | El lote tiene al menos un uso_tanque y al menos una asigna | Rechaza la confirmación; lote, uso_tanque y asigna se insertan en la misma transacción |
 
 ### Transiciones de estado
@@ -374,7 +376,8 @@ Un trigger BEFORE UPDATE de la columna de estado rechaza cualquier cambio que no
 | lote_produccion.estado | aprobado | envasado |
 | lote_produccion.estado | rechazado | descartado |
 | lote_leche.estado_lote | recibido | disponible, rechazado |
-| lote_leche.estado_lote | disponible | agotado |
+| lote_leche.estado_lote | disponible | agotado, rechazado (una prueba microbiológica nueva rechazada) |
+| lote_leche.estado_lote | agotado | rechazado (una prueba microbiológica nueva rechazada) |
 
 ---
 
@@ -395,7 +398,12 @@ Un trigger BEFORE UPDATE de la columna de estado rechaza cualquier cambio que no
 | Atributos de las asociativas | Módulo 4 los escribe distinto al diagrama (cantidad, estado, fechaHora) | Los del diagrama: cantidad_consumida, estado_uso, fecha_hora_asignacion |
 | Valor Operario | Módulo 3 usa Operario en origen_registro y cargos con espacios y tildes (Operador de tanque, Técnico de calidad) | origen_registro: sensor o manual; cargos operador_tanque, tecnico_calidad y supervisor |
 | Valores literales | Módulo 3 escribe en proceso y venta directa con espacios | en_proceso y venta_directa, sin tildes ni espacios |
-| RN-02 | Módulo 3 permite consumir hasta la fecha de caducidad inclusive | CHECK fecha_caducidad mayor o igual a fecha_recepcion |
+| RN-02 (CHECK) | Módulo 3 lo implementa en lote_insumo con CHECK de fechas | CHECK fecha_caducidad mayor o igual a fecha_recepcion |
+| RN-02 (trigger) | Módulo 3 lo implementa en consumo_insumo con trigger y permite consumir hasta la fecha de caducidad inclusive | Trigger BEFORE INSERT que compara fecha_hora_consumo con fecha_caducidad |
 | Envasado.estado | Módulo 5 deja sus valores al diccionario (Módulo 7); Módulo 3 los define | abierto y cerrado, del Módulo 3 |
+| Alcance de producto | Módulo 3 (1.6) lista cinco valores de tipo_producto; Módulos 4 y 5 y la sección de justificaciones dicen que la fase 1 es solo yogur | El CHECK usa los cinco valores del Módulo 3 más leche_cruda en estandar_calidad; el grupo debe decidir cuál versión vale y alinear los Módulos 1, 4 y 5 |
+| Tipo de producto de la leche cruda | Ningún módulo define el tipo_producto de un estándar de recepción | Se agregó el valor leche_cruda al dominio de estandar_calidad |
+| Temperaturas de envasado y despacho | Módulo 4: temperatura_envasado y temperatura_despacho son columnas de envasado | No se validan contra estandar_calidad: son columnas del envasado, no pruebas, y no tienen FK al estándar. Se interpretan con el rango de temperatura de la etapa envasado; si el grupo quiere forzarlo, hace falta un trigger en envasado |
+| Pruebas nuevas sobre un lote ya disponible | Módulo 3 (1.2) no lo dice | Una prueba microbiológica rechazada lleva el lote a rechazado desde disponible o agotado; reproceso no cambia el dictamen |
 
 Esta tabla se actualiza cuando los Módulos 3, 4 y 5 queden corregidos.
