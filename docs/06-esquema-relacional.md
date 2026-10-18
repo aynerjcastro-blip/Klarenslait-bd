@@ -379,31 +379,3 @@ Un trigger BEFORE UPDATE de la columna de estado rechaza cualquier cambio que no
 | lote_leche.estado_lote | disponible | agotado, rechazado (una prueba microbiológica nueva rechazada) |
 | lote_leche.estado_lote | agotado | rechazado (una prueba microbiológica nueva rechazada) |
 
----
-
-## 8. Diferencias entre módulos que el equipo debe resolver
-
-| Tema | Lo que dicen los módulos | Lo que usa este esquema |
-|---|---|---|
-| Parámetro y unidad de la prueba | Módulos 4 y 5 y el diagrama los guardan en prueba_calidad | Se quitaron de prueba_calidad (D8, opción a) por la 3FN; el diagrama y el Módulo 4 deben actualizarse |
-| Etapa en estandar_calidad | Módulo 3 define sus valores (recepcion, fermentacion, mezcla, envasado); Módulos 4 y 5 y el diagrama no tienen el atributo | Atributo etapa NOT NULL |
-| unidad_medida en estandar_calidad | Módulos 4 y 5 y el diagrama no la tienen ahí | Se agregó (D8) |
-| tipo_producto en estandar_calidad | Está en el Módulo 5 y en el diagrama; no en la lista de atributos del Módulo 4 | Se incluyó |
-| Nombre de tipo_producto | Módulo 3 (1.6) lo llama tipo_produccion; Módulo 4 y diagrama, tipo_producto | tipo_producto |
-| fecha de despacho | Módulo 3 (supuesto 27) usa fecha_despacho; Módulo 4 y diagrama, fecha_hora_despacho | fecha_hora_despacho |
-| FK hacia empleado | Módulo 3 usa id_empleado; el Módulo 4 usa supervisor y responsableRegistro | id_supervisor e id_responsable_registro, para distinguir las dos relaciones |
-| Observaciones de Almacena | Módulo 5 y diagrama las tienen; Módulo 4, parte 1, no | Se incluyeron |
-| Columnas de las FK nuevas | Módulo 4 y el diagrama muestran R12 y R13 pero no las columnas id_proveedor en lote_insumo ni id_estandar en prueba_calidad | Se agregaron |
-| Nombres de tablas intermedias | Módulos 3 y 5 usan almacena, ocupa y consume; Módulo 4, UsoTanque y ConsumoInsumo | almacena, uso_tanque, consumo_insumo y asigna |
-| Atributos de las asociativas | Módulo 4 los escribe distinto al diagrama (cantidad, estado, fechaHora) | Los del diagrama: cantidad_consumida, estado_uso, fecha_hora_asignacion |
-| Valor Operario | Módulo 3 usa Operario en origen_registro y cargos con espacios y tildes (Operador de tanque, Técnico de calidad) | origen_registro: sensor o manual; cargos operador_tanque, tecnico_calidad y supervisor |
-| Valores literales | Módulo 3 escribe en proceso y venta directa con espacios | en_proceso y venta_directa, sin tildes ni espacios |
-| RN-02 (CHECK) | Módulo 3 lo implementa en lote_insumo con CHECK de fechas | CHECK fecha_caducidad mayor o igual a fecha_recepcion |
-| RN-02 (trigger) | Módulo 3 lo implementa en consumo_insumo con trigger y permite consumir hasta la fecha de caducidad inclusive | Trigger BEFORE INSERT que compara fecha_hora_consumo con fecha_caducidad |
-| Envasado.estado | Módulo 5 deja sus valores al diccionario (Módulo 7); Módulo 3 los define | abierto y cerrado, del Módulo 3 |
-| Alcance de producto | Módulo 3 (1.6) lista cinco valores de tipo_producto; Módulos 4 y 5 y la sección de justificaciones dicen que la fase 1 es solo yogur | El CHECK usa los cinco valores del Módulo 3 más leche_cruda en estandar_calidad; el grupo debe decidir cuál versión vale y alinear los Módulos 1, 4 y 5 |
-| Tipo de producto de la leche cruda | Ningún módulo define el tipo_producto de un estándar de recepción | Se agregó el valor leche_cruda al dominio de estandar_calidad |
-| Temperaturas de envasado y despacho | Módulo 4: temperatura_envasado y temperatura_despacho son columnas de envasado | No se validan contra estandar_calidad: son columnas del envasado, no pruebas, y no tienen FK al estándar. Se interpretan con el rango de temperatura de la etapa envasado; si el grupo quiere forzarlo, hace falta un trigger en envasado |
-| Pruebas nuevas sobre un lote ya disponible | Módulo 3 (1.2) no lo dice | Una prueba microbiológica rechazada lleva el lote a rechazado desde disponible o agotado; reproceso no cambia el dictamen |
-
-Esta tabla se actualiza cuando los Módulos 3, 4 y 5 queden corregidos.
