@@ -8,7 +8,7 @@ CREATE TABLE lote_insumo (
     cantidad_disponible  NUMERIC(12,3) NOT NULL,
     fecha_recepcion      DATE          NOT NULL,
     fecha_caducidad      DATE          NOT NULL,
-    estado               VARCHAR(12)   NOT NULL DEFAULT 'disponible',
+    estado               VARCHAR(20)   NOT NULL DEFAULT 'disponible',
     id_insumo            INTEGER       NOT NULL,
     id_proveedor         INTEGER       NOT NULL,
 

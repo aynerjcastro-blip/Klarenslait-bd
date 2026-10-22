@@ -4,9 +4,9 @@ BEGIN;
 CREATE TABLE insumo (
     id_insumo         INTEGER GENERATED ALWAYS AS IDENTITY,
     codigo            VARCHAR(30) NOT NULL,
-    categoria_insumo  VARCHAR(20) NOT NULL,
-    unidad_medida     VARCHAR(10) NOT NULL,
-    estado            VARCHAR(10) NOT NULL DEFAULT 'activo',
+    categoria_insumo  VARCHAR(30) NOT NULL,
+    unidad_medida     VARCHAR(20) NOT NULL,
+    estado            VARCHAR(20) NOT NULL DEFAULT 'activo',
 
     CONSTRAINT pk_insumo
         PRIMARY KEY (id_insumo),

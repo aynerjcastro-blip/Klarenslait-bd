@@ -6,9 +6,9 @@ CREATE TABLE proveedor (
     nombre          VARCHAR(120) NOT NULL,
     ubicacion       VARCHAR(150) NOT NULL,
     telefono        VARCHAR(20),
-    tipo_proveedor  VARCHAR(10)  NOT NULL,
+    tipo_proveedor  VARCHAR(20)  NOT NULL,
     identificacion  VARCHAR(20)  NOT NULL,
-    estado          VARCHAR(10)  NOT NULL DEFAULT 'activo',
+    estado          VARCHAR(20)  NOT NULL DEFAULT 'activo',
 
     CONSTRAINT pk_proveedor
         PRIMARY KEY (id_proveedor),

@@ -4,7 +4,7 @@ BEGIN;
 CREATE TABLE silo (
     id_silo           INTEGER GENERATED ALWAYS AS IDENTITY,
     codigo            VARCHAR(20)   NOT NULL,
-    tipo_silo         VARCHAR(10)   NOT NULL,
+    tipo_silo         VARCHAR(20)   NOT NULL,
     capacidad_maxima  NUMERIC(12,2) NOT NULL,
     volumen_actual    NUMERIC(12,2) NOT NULL DEFAULT 0,
     estado_operativo  VARCHAR(20)   NOT NULL,

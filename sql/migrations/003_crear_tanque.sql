@@ -4,7 +4,7 @@ BEGIN;
 CREATE TABLE tanque (
     id_tanque         INTEGER GENERATED ALWAYS AS IDENTITY,
     codigo            VARCHAR(20)   NOT NULL,
-    tipo_tanque       VARCHAR(15)   NOT NULL,
+    tipo_tanque       VARCHAR(20)   NOT NULL,
     capacidad_maxima  NUMERIC(12,2) NOT NULL,
     volumen_actual    NUMERIC(12,2) NOT NULL DEFAULT 0,
     estado_operativo  VARCHAR(20)   NOT NULL,

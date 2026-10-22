@@ -7,8 +7,8 @@ CREATE TABLE lote_leche (
     fecha_recepcion            TIMESTAMPTZ   NOT NULL,
     volumen_inicial_litros     NUMERIC(12,2) NOT NULL,
     volumen_disponible_litros  NUMERIC(12,2) NOT NULL,
-    dictamen_microbiologico    VARCHAR(10)   NOT NULL DEFAULT 'pendiente',
-    estado_lote                VARCHAR(10)   NOT NULL DEFAULT 'recibido',
+    dictamen_microbiologico    VARCHAR(20)   NOT NULL DEFAULT 'pendiente',
+    estado_lote                VARCHAR(20)   NOT NULL DEFAULT 'recibido',
     id_proveedor_origen        INTEGER       NOT NULL,
 
     CONSTRAINT pk_lote_leche

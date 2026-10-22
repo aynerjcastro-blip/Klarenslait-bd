@@ -4,9 +4,9 @@ BEGIN;
 CREATE TABLE empleado (
     id_empleado         INTEGER GENERATED ALWAYS AS IDENTITY,
     nombre              VARCHAR(120) NOT NULL,
-    cargo               VARCHAR(20)  NOT NULL,
+    cargo               VARCHAR(30)  NOT NULL,
     identificacion      VARCHAR(20)  NOT NULL,
-    estado_vinculacion  VARCHAR(10)  NOT NULL DEFAULT 'activo',
+    estado_vinculacion  VARCHAR(20)  NOT NULL DEFAULT 'activo',
 
     CONSTRAINT pk_empleado
         PRIMARY KEY (id_empleado),
