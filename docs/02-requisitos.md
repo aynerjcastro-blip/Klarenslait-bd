@@ -19,3 +19,5 @@
 |   13 | ¿Cuál es el promedio mensual de acidez (grados Dornic) registrado en la recepción de leche cruda según cada proveedor durante el último trimestre? | Control de calidad | Deseable |
 |   14 | ¿Qué lotes de yogur presentaron desviaciones de temperatura en el tanque de fermentación superando el límite crítico de 45 °C? | Alertas / umbrales | Crítica |
 |   15 | ¿Qué empleado supervisó un tanque específico y en qué horario exacto operó durante el proceso de un lote de yogur (validando la asignación de recursos y tiempos)? | Control de calidad | Crítica |
+
+
