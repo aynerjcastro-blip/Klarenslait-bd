@@ -26,5 +26,5 @@ create table lote_leche(
 	constraint lote_leche_agotado_exige_cero_litros
 	           check(not (estado_lote = 'Agotado' and volumen_disponible_litros != 0)),
 	constraint lote_leche_dictamen_rechazado_exige_estado_rechazado
-	           check(not (dictamen_microbiologico = 'Rechazado' and estado_lote != 'rechazado'))
+	           check(not (dictamen_microbiologico = 'Rechazado' and estado_lote != 'Rechazado'))
 )
