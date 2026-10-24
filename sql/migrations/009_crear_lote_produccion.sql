@@ -6,7 +6,7 @@ create table lote_produccion (
                     constraint uq_lote_produccion_codigo unique,
     tipo_producto varchar(20) not null
                             constraint ck_lote_produccion_tipo_producto
-                                check (tipo_producto in ('yogurt','queso','suero','avena','leche_uht')),
+                                check (tipo_producto in ('Yogurt','Queso','Suero','Avena','Leche_uht')),
     volumen_planificado_litros numeric(12,2) not null
                                             constraint ck_lote_produccion_volumen_planificado
                                                 check (volumen_planificado_litros > 0),
@@ -15,9 +15,9 @@ create table lote_produccion (
                                             check (volumen_producido_litros >= 0),
     fecha_hora_inicio timestamptz not null,
     fecha_hora_fin timestamptz,
-    estado varchar(20) not null default 'en_proceso'
+    estado varchar(20) not null default 'En_proceso'
                     constraint ck_lote_produccion_estado
-                        check (estado in ('en_proceso','aprobado','rechazado','envasado','descartado')),
+                        check (estado in ('En_proceso','Aprobado','Rechazado','Envasado','Descartado')),
     id_supervisor integer not null
         references empleado (id_empleado) on delete restrict,
     constraint ck_lote_produccion_fechas

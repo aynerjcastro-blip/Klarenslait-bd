@@ -5,14 +5,14 @@ create table prueba_calidad (
     fecha_hora timestamptz not null,
     tipo_prueba varchar(25) not null
                         constraint ck_prueba_calidad_tipo_prueba
-                            check (tipo_prueba in ('microbiologica','fisicoquimica','ph_linea','temperatura_linea')),
+                            check (tipo_prueba in ('Microbiologica','Fisicoquimica','Ph_linea','Temperatura_linea')),
     valor_obtenido numeric(12,4) not null,
     resultado varchar(20) not null
                         constraint ck_prueba_calidad_resultado
-                            check (resultado in ('aprobado','rechazado','reproceso')),
+                            check (resultado in ('Aprobado','Rechazado','Reproceso')),
     origen_registro varchar(20) not null
                                 constraint ck_prueba_calidad_origen
-                                    check (origen_registro in ('sensor','manual')),
+                                    check (origen_registro in ('Sensor','Manual')),
     id_lote_produccion integer
         references lote_produccion (id_lote_produccion) on delete restrict,
     id_lote_leche integer
@@ -24,12 +24,12 @@ create table prueba_calidad (
     constraint ck_prueba_calidad_un_solo_lote
         check (num_nonnulls(id_lote_produccion, id_lote_leche) = 1),
     constraint ck_prueba_calidad_linea_exige_lote_produccion
-        check (tipo_prueba not in ('ph_linea','temperatura_linea') or id_lote_produccion is not null),
+        check (tipo_prueba not in ('Ph_linea','Temperatura_linea') or id_lote_produccion is not null),
     constraint ck_prueba_calidad_sensor_sin_responsable
-        check (origen_registro <> 'sensor'
-               or (id_responsable_registro is null and tipo_prueba in ('ph_linea','temperatura_linea'))),
+        check (origen_registro <> 'Sensor'
+               or (id_responsable_registro is null and tipo_prueba in ('Ph_linea','Temperatura_linea'))),
     constraint ck_prueba_calidad_manual_con_responsable
-        check (origen_registro <> 'manual' or id_responsable_registro is not null)
+        check (origen_registro <> 'Manual' or id_responsable_registro is not null)
 );
 
 commit;

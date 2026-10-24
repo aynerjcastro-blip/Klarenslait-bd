@@ -8,14 +8,14 @@ create table uso_tanque (
         references lote_produccion (id_lote_produccion) on delete restrict,
     fecha_hora_inicio timestamptz not null,
     fecha_hora_fin timestamptz,
-    estado_uso varchar(20) not null default 'activo'
+    estado_uso varchar(20) not null default 'Activo'
                         constraint ck_uso_tanque_estado_uso 
-                            check (estado_uso in ('activo','finalizado')),
+                            check (estado_uso in ('Activo','Finalizado')),
     constraint ck_uso_tanque_fechas
         check (fecha_hora_fin is null or fecha_hora_fin >= fecha_hora_inicio),
-    -- estado_uso es un dato derivado: 'activo' si y solo si fecha_hora_fin está vacía (docs/07, 4.2).
+    -- estado_uso es un dato derivado: 'Activo' si y solo si fecha_hora_fin está vacía (docs/07, 4.2).
     constraint ck_uso_tanque_estado_coherente
-        check ((estado_uso = 'activo') = (fecha_hora_fin is null))
+        check ((estado_uso = 'Activo') = (fecha_hora_fin is null))
 );
 
 -- rn-06: un solo uso activo por tanque.

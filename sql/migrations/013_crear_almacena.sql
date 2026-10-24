@@ -9,7 +9,7 @@ create table almacena (
     fecha_hora timestamptz not null,
     tipo_movimiento varchar(20) not null
                             constraint ck_almacena_tipo_movimiento 
-                                check (tipo_movimiento in ('entrada','salida')),
+                                check (tipo_movimiento in ('Entrada','Salida')),
     volumen_litros numeric(12,2) not null
                             constraint ck_almacena_volumen check (volumen_litros > 0),
     observaciones text
