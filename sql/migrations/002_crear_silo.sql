@@ -1,28 +1,19 @@
--- Migración 002: silo
-BEGIN;
-
-CREATE TABLE silo (
-    id_silo           INTEGER GENERATED ALWAYS AS IDENTITY,
-    codigo            VARCHAR(20)   NOT NULL,
-    tipo_silo         VARCHAR(20)   NOT NULL,
-    capacidad_maxima  NUMERIC(12,2) NOT NULL,
-    volumen_actual    NUMERIC(12,2) NOT NULL DEFAULT 0,
-    estado_operativo  VARCHAR(20)   NOT NULL,
-
-    CONSTRAINT pk_silo
-        PRIMARY KEY (id_silo),
-    CONSTRAINT uq_silo_codigo
-        UNIQUE (codigo),
-    CONSTRAINT ck_silo_tipo_silo
-        CHECK (tipo_silo IN ('recepcion', 'acopio')),
-    CONSTRAINT ck_silo_estado_operativo
-        CHECK (estado_operativo IN ('operativo', 'en_mantenimiento', 'fuera_de_servicio')),
-    CONSTRAINT ck_silo_capacidad_positiva
-        CHECK (capacidad_maxima > 0),
-    CONSTRAINT ck_silo_volumen_no_negativo
-        CHECK (volumen_actual >= 0),
-    CONSTRAINT ck_silo_volumen_no_supera_capacidad
-        CHECK (volumen_actual <= capacidad_maxima)
-);
-
-COMMIT;
+create table silo(
+    id_silo serial primary key,
+    codigo  varchar(20) not null
+	                 constraint silo_codigo_unico unique,
+    tipo_silo varchar(20) not null 
+	                   constraint silo_tipo_silo_valido
+					       check(tipo_silo in('Recepcion','Acopio')),
+    capacidad_maxima numeric(12,2) not null
+	                            constraint silo_capacidad_maxima_mayor_que_cero 
+								    check(capacidad_maxima > 0),
+    volumen_actual numeric(12,2) not null default 0 
+	                          constraint silo_volumen_actual_mayor_que_cero
+							      check(volumen_actual >= 0),
+    estado_operativo varchar(20) not null
+	                          constraint silo_estado_operativo_valido 
+							      check(estado_operativo in ('operativo', 'en_mantenimiento', 'fuera_de_servicio')),
+     constraint silo_volumen_actual_no_negativo
+	     check(volumen_actual >= 0)
+)

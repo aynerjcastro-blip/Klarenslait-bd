@@ -1,28 +1,19 @@
--- Migración 003: tanque
-BEGIN;
-
-CREATE TABLE tanque (
-    id_tanque         INTEGER GENERATED ALWAYS AS IDENTITY,
-    codigo            VARCHAR(20)   NOT NULL,
-    tipo_tanque       VARCHAR(20)   NOT NULL,
-    capacidad_maxima  NUMERIC(12,2) NOT NULL,
-    volumen_actual    NUMERIC(12,2) NOT NULL DEFAULT 0,
-    estado_operativo  VARCHAR(20)   NOT NULL,
-
-    CONSTRAINT pk_tanque
-        PRIMARY KEY (id_tanque),
-    CONSTRAINT uq_tanque_codigo
-        UNIQUE (codigo),
-    CONSTRAINT ck_tanque_tipo_tanque
-        CHECK (tipo_tanque IN ('fermentacion', 'mezcla')),
-    CONSTRAINT ck_tanque_estado_operativo
-        CHECK (estado_operativo IN ('operativo', 'en_mantenimiento', 'fuera_de_servicio')),
-    CONSTRAINT ck_tanque_capacidad_positiva
-        CHECK (capacidad_maxima > 0),
-    CONSTRAINT ck_tanque_volumen_no_negativo
-        CHECK (volumen_actual >= 0),
-    CONSTRAINT ck_tanque_volumen_no_supera_capacidad
-        CHECK (volumen_actual <= capacidad_maxima)
-);
-
-COMMIT;
+create table tanque(
+    id_tanque serial primary key,
+    codigo varchar(20) not null 
+	                constraint tanque_codigo_unico unique,
+    tipo_tanque varchar(20) not null
+	                     constraint tanque_tipo_tanque_valido 
+						     check(tipo_tanque in ('Fermentacion', 'Mezcla')),
+    capacidad_maxima numeric(12,2) not null
+	                            constraint tanque_capacidad_maxima_mayor_que_cero
+								    check(capacidad_maxima > 0),
+    volumen_actual numeric(12,2) not null 
+	                          constraint tanque_volumen_actual_no_negativo
+							      check(volumen_actual >= 0),
+     constraint tanque_volumen_actual_no_mayor_que_capacidad_maxima 
+	    check(volumen_actual <= capacidad_maxima),
+    estado_operativo varchar(20) not null 
+	                          constraint tanque_estado_operativo_valido 
+							      check(estado_operativo IN ('Operativo', 'En_mantenimiento', 'Fuera_de_servicio'))
+)

@@ -1,21 +1,11 @@
--- Migración 005: empleado
-BEGIN;
-
-CREATE TABLE empleado (
-    id_empleado         INTEGER GENERATED ALWAYS AS IDENTITY,
-    nombre              VARCHAR(120) NOT NULL,
-    cargo               VARCHAR(30)  NOT NULL,
-    identificacion      VARCHAR(20)  NOT NULL,
-    estado_vinculacion  VARCHAR(20)  NOT NULL DEFAULT 'activo',
-
-    CONSTRAINT pk_empleado
-        PRIMARY KEY (id_empleado),
-    CONSTRAINT uq_empleado_identificacion
-        UNIQUE (identificacion),
-    CONSTRAINT ck_empleado_cargo
-        CHECK (cargo IN ('operador_tanque', 'tecnico_calidad', 'supervisor')),
-    CONSTRAINT ck_empleado_estado_vinculacion
-        CHECK (estado_vinculacion IN ('activo', 'inactivo'))
-);
-
-COMMIT;
+create table empleado(
+    id_empleado serial primary key,
+    nombre varchar(120) not null,
+    cargo varchar(30) not null
+	               constraint empleado_cargo_valido
+				       check(cargo in ('Operador_tanque', 'Tecnico_calidad', 'Supervisor')),
+    identificacion varchar(20) not null 
+	                        constraint empleado_identificacion_unica unique,
+    estado_vinculacion varchar(20) not null default 'Activo'
+	                            constraint empleado_estado_vinculacion_valido check(estado_vinculacion in ('Activo', 'Inactivo'))
+)
