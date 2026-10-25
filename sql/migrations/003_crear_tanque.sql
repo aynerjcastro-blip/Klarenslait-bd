@@ -1,3 +1,5 @@
+begin;
+
 create table tanque(
     id_tanque serial primary key,
     codigo varchar(20) not null 
@@ -16,4 +18,6 @@ create table tanque(
     estado_operativo varchar(20) not null 
 	                          constraint tanque_estado_operativo_valido 
 							      check(estado_operativo IN ('Operativo', 'En_mantenimiento', 'Fuera_de_servicio'))
-)
+);
+
+commit;

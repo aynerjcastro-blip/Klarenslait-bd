@@ -1,3 +1,5 @@
+begin;
+
 create table lote_leche(
     id_lote_leche serial primary key,
     codigo varchar(30) not null 
@@ -27,4 +29,6 @@ create table lote_leche(
 	           check(not (estado_lote = 'Agotado' and volumen_disponible_litros != 0)),
 	constraint lote_leche_dictamen_rechazado_exige_estado_rechazado
 	           check(not (dictamen_microbiologico = 'Rechazado' and estado_lote != 'Rechazado'))
-)
+);
+
+commit;
