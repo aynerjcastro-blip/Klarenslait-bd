@@ -1,3 +1,5 @@
+begin;
+
 create table lote_insumo(
     id_lote_insumo serial primary key,
     codigo_lote_insumo varchar(30) not null
@@ -21,4 +23,6 @@ create table lote_insumo(
 			   check(cantidad_disponible <= cantidad_inicial),
 	constraint lote_insumo_caducidad_no_anterior_a_recepcion
 			   check(fecha_caducidad >= fecha_recepcion)
-)
+);
+
+commit;
