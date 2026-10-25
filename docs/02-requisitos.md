@@ -1,22 +1,23 @@
 # Requisitos de Información y Consultas Clave
 
+## Requisitos de Información — Lácteos Klarens (Línea Yogur)
 
-## Requisitos de Información - Lácteos Klarens
+|   ID | Requisito de Información | Categoría | Prioridad |
+|-----:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------|:------------|
+|    1 | ¿Cuál es el porcentaje de lotes de yogur aprobados frente al total de lotes procesados durante un período determinado? | Control de calidad | Deseable |
+|    2 | ¿Cuál es la temperatura promedio de incubación registrada en los tanques durante la elaboración de los lotes de yogur del mes actual? | Control de calidad | Deseable |
+|    3 | ¿Cuál es el lote de yogur con mayor volumen total producido (en litros) durante un período específico en comparación con el período anterior? | Trazabilidad | Deseable |
+|    4 | ¿Qué proveedores de leche cruda y qué silos de acopio suministraron los insumos para un lote específico de yogur rechazado por contaminación microbiológica? | Trazabilidad | Crítica |
+|    5 | ¿Cuál es el pH promedio registrado en la recepción de leche cruda para los lotes destinados a la producción de yogur durante el último trimestre? | Control de calidad | Deseable |
+|    6 | ¿Cuál es el volumen total de leche cruda procesada, la cantidad de aditivos utilizados y el volumen de lotes descartados en planta durante el período actual? | Reportes regulatorios | Crítica |
+|    7 | ¿Cuáles son los códigos, las fechas de vencimiento y los resultados microbiológicos de laboratorio aprobados de los lotes de yogur terminados del último mes? | Reportes regulatorios | Crítica |
+|    8 | ¿Qué lotes de leche cruda recibidos registraron niveles de pH fuera del rango normativo de 6.4 a 6.8 (según estándar técnico)? | Control de calidad | Crítica |
+|    9 | ¿Qué proveedores, códigos y fechas de caducidad registran los lotes de insumos, aditivos y cultivos lácticos consumidos en la producción durante el trimestre? | Trazabilidad | Crítica |
+|   10 | ¿Qué lotes de yogur producidos superaron el porcentaje máximo de azúcares añadidos permitido del 12% establecido en el estándar de calidad? | Alertas / umbrales | Crítica |
+|   11 | ¿Qué lotes de yogur producidos en el último mes registraron presencia de microorganismos patógenos fuera de los parámetros permitidos en laboratorio? | Control de calidad | Crítica |
+|   12 | ¿A qué canal de destino (mayorista, minorista o venta directa) y en qué fecha se asignó cada lote de yogur terminado? | Trazabilidad | Deseable |
+|   13 | ¿Cuál es el promedio mensual de acidez (grados Dornic) registrado en la recepción de leche cruda según cada proveedor durante el último trimestre? | Control de calidad | Deseable |
+|   14 | ¿Qué lotes de yogur presentaron desviaciones de temperatura en el tanque de fermentación superando el límite crítico de 45 °C? | Alertas / umbrales | Crítica |
+|   15 | ¿Qué empleado supervisó un tanque específico y en qué horario exacto operó durante el proceso de un lote de yogur (validando la asignación de recursos y tiempos)? | Control de calidad | Crítica |
 
-|   ID | Requisito de Información                                                                                                                                                                                                          | Categoría             | Prioridad   |
-|-----:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------|:------------|
-|    1 | ¿Cuál fue el porcentaje de lotes de yogurt aprobados frente al total de lotes procesados durante el mes pasado?                                                                                                                   | Control de calidad    | Deseable   |
-|    2 | ¿Cuál fue la temperatura promedio de incubación y el tiempo promedio de cuajado de los lotes de queso producidos este mes, comparado con el mes anterior?                                                           | Control de calidad    | Deseable    |
-|    3 | ¿Cuál fue el producto lácteo con mayor volumen total producido (en litros) durante la temporada de diciembre en comparación con el mismo período del año anterior?                                                                | Trazabilidad          | Deseable    |
-|    4 | ¿Qué proveedores de leche cruda y de qué silos de acopio provienen los insumos del lote de yogurt/queso  que fue rechazado por contaminación microbiológica?                                                                      | Control de calidad    | Critica     |
-|    5 | ¿Cuál fue el pH promedio registrado en la recepción de leche cruda, el tiempo promedio de fermentación y el porcentaje de lotes rechazados de yogurt/queso durante el último trimestre?                            | Control de calidad    | Deseable    |
-|    6 | ¿Cuál es el reporte consolidado mensual de volumen total de leche procesada, aditivos utilizados y lotes descartados exigido por la entidad sanitaria auditora para el período actual?                                            | Reportes regulatorios | Crítica     |
-|    7 | ¿Cuál es el reporte consolidado de lotes de yogurt terminados, sus fechas de vencimiento y los resultados microbiológicos de laboratorio aprobados durante el último mes, para presentar en la auditoría de la entidad sanitaria? | Reportes regulatorios | Crítica     |
-|    8 | ¿Qué lotes de leche cruda recibidos entre [fecha inicio] y [fecha fin] (periodo de mayor temperatura ambiente en la región) registraron niveles de pH fuera del rango normativo de 6.4 a 6.8?                                                                         | Control de calidad    | Crítica     |
-|    9 | ¿Cuál es el informe oficial trimestral de trazabilidad de insumos aditivos y cultivos lácticos utilizados, especificando proveedores y fechas de caducidad, exigido por los inspectores de salud pública                          | Reportes regulatorios | Critica     |
-|   10 | ¿Qué lotes de yogurt producidos durante el año 2025 registraron un porcentaje de azúcares añadidos superior al límite máximo permitido del 12% (o gramos por porción) establecido por la norma sanitaria?                         | Alertas/umbrales      | Critica     |
-|   11 | ¿Qué lotes de yogurt producidos durante el último mes registraron presencia de microorganismos contaminantes o patógenos fuera de los parámetros microbiológicos permitidos en los análisis de laboratorio?                       | Control de calidad    | Crítica     |
-|   12 | ¿Cuál es el informe semestral consolidado sobre el volumen de suero lácteo y residuos orgánicos generados en la planta para el cumplimiento de las normativas ambientales de vertimientos?                                        | Reportes regulatorios | Deseable    |
-|   13 | ¿A qué canal de destino se asignó cada lote de producto terminado, y en qué fecha?                                                                                                 | Trazabilidad          | Deseable    |
-|   14 | ¿Cuál fue el promedio mensual de acidez (grados Dornic) y porcentaje de grasa registrado en la recepción de leche cruda según cada proveedor durante el último trimestre?                                                         | Control de calidad    | Deseable    |
-|   15 | ¿Qué lotes de yogurt o queso presentaron desviaciones en las lecturas de temperatura durante el proceso de fermentación superando los 45 °C establecidos como límite crítico?                                                     | Alertas / umbrales    | Critica     
+

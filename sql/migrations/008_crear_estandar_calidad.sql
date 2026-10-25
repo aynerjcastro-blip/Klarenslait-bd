@@ -21,7 +21,3 @@ create table estandar_calidad(
     constraint estandar_calidad_vigente_hasta_no_anterior_a_desde 
 		    check(vigente_hasta is null or vigente_hasta >= vigente_desde)
 );
-
-create unique index estandar_calidad_un_solo_estandar_vigente
-on estandar_calidad(tipo_producto, parametro, etapa)
-where vigente_hasta is null;
