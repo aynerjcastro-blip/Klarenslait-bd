@@ -1,5 +1,3 @@
-begin;
-
 create table empleado(
     id_empleado serial primary key,
     nombre varchar(120) not null,
@@ -10,6 +8,4 @@ create table empleado(
 	                        constraint empleado_identificacion_unica unique,
     estado_vinculacion varchar(20) not null default 'Activo'
 	                            constraint empleado_estado_vinculacion_valido check(estado_vinculacion in ('Activo', 'Inactivo'))
-);
-
-commit;
+)

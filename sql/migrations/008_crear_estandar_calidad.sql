@@ -1,5 +1,3 @@
-begin;
-
 create table estandar_calidad(
     id_estandar serial primary key,
     tipo_producto varchar(20) not null 
@@ -10,7 +8,7 @@ create table estandar_calidad(
 					       check(parametro in ('Ph', 'Temperatura', 'Acidez_dornic', 'Grasa', 'Viscosidad', 'Microorganismos')),
     etapa varchar(20) not null 
 	               constraint estandar_calidad_etapa_valida
-				       check(etapa in ('Recepcion', 'Fermentacion', 'Mezcla', 'Envasado')),
+				       check(etapa in ('recepcion', 'Fermentacion', 'Mezcla', 'Envasado')),
     unidad_medida varchar(20) not null 
                            constraint estandar_calidad_unidad_medida_valida 
 						       check(unidad_medida in ('Adimensional', 'Grados_celsius', 'Grados_dornic', 'Porcentaje', 'Cp', 'Ufc_ml')),
@@ -24,4 +22,6 @@ create table estandar_calidad(
 		    check(vigente_hasta is null or vigente_hasta >= vigente_desde)
 );
 
-commit;
+create unique index estandar_calidad_un_solo_estandar_vigente
+on estandar_calidad(tipo_producto, parametro, etapa)
+where vigente_hasta is null;

@@ -1,5 +1,3 @@
-begin;
-
 create table proveedor(
     id_proveedor serial primary key,
     nombre varchar(120) not null,
@@ -13,6 +11,4 @@ create table proveedor(
     estado varchar(20) not null default 'Activo'
                     constraint proveedor_estado_valido 
 						check(estado in ('Activo','Inactivo'))
-);
-
-commit;
+)

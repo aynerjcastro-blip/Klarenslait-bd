@@ -1,5 +1,3 @@
-begin;
-
 create table insumo(
     id_insumo serial primary key,
     codigo varchar(30) not null
@@ -13,6 +11,4 @@ create table insumo(
     estado varchar(20) not null default 'Activo'
 	                constraint insumo_estado_valido 
 					    check(estado in ('Activo', 'Inactivo'))
-);
-
-commit;
+)
