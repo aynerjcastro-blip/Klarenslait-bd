@@ -1,6 +1,5 @@
 # Módulo 6 — Auditoría de Normalización
 
-
 ## 1. Criterios usados
 
 | Forma normal | Qué se verifica |
@@ -10,32 +9,32 @@
 | 3FN | Cumple 2FN y ningún atributo no clave depende de otro atributo no clave (sin dependencias transitivas). |
 | BCNF | Todo determinante de una dependencia funcional es clave candidata. |
 
-Notación: `A → B` significa que el valor de A determina el valor de B. Las claves candidatas, además de la PK, se señalan en cada tabla.
+Notación: `A → B` significa que el valor de A determina el valor de B. "todos" significa todos los demás atributos de la tabla.
 
 ## 2. Resumen por tabla
 
-| Tabla | PK | 1FN | 2FN | 3FN | BCNF | Observación |
-|---|---|---|---|---|---|---|
-| `proveedor` | id_proveedor | Sí | Sí | Sí | Sí | Sin observaciones. |
-| `lote_leche` | id_lote_leche | Sí | Sí | Sí | Sí | `volumen_disponible_litros` es dato de estado; `dictamen_microbiologico` y `estado_lote` son derivados (ver 4.2). |
-| `silo` | id_silo | Sí | Sí | Sí | Sí | `volumen_actual` es dato de estado (ver 4.2). |
-| `tanque` | id_tanque | Sí | Sí | Sí | Sí | `volumen_actual` es dato de estado (ver 4.2). |
-| `insumo` | id_insumo | Sí | Sí | Sí* | Sí* | *Condicionado a que la unidad de medida sea propia de cada insumo (ver 4.3). |
-| `lote_insumo` | id_lote_insumo | Sí | Sí | Sí | Sí | `cantidad_disponible` es un dato derivado (ver 4.2). |
-| `empleado` | id_empleado | Sí | Sí | Sí | Sí | Sin observaciones. |
-| `lote_produccion` | id_lote_produccion | Sí | Sí | Sí | Sí | `estado` es un dato derivado en parte (ver 4.2). |
-| `estandar_calidad` | id_estandar | Sí | Sí | **No** | **No** | `unidad_medida` depende del parámetro. Excepción justificada (ver 4.1). |
-| `prueba_calidad` | id_prueba_calidad | Sí | Sí | Sí | Sí | Resuelta: ya no guarda límites ni unidad (ver 4.4). |
-| `envasado` | id_envasado | Sí | Sí | Sí | Sí | Sin observaciones. |
-| `descarte` | id_lote_produccion | Sí | Sí | Sí | Sí | La clave es la del lote (entidad débil). |
-| `almacena` | id_almacena | Sí | Sí | Sí | Sí | Sin observaciones. |
-| `uso_tanque` | id_uso_tanque | Sí | Sí | Sí | Sí | `estado_uso` se deriva de `fecha_hora_fin` (ver 4.2). |
-| `consumo_insumo` | id_consumo_insumo | Sí | Sí | Sí | Sí | Resuelta: clave propia (ver 4.4). |
-| `asigna` | id_asigna | Sí | Sí | Sí | Sí | Sin observaciones. |
+| Tabla | PK | Dependencias funcionales | 1FN | 2FN | 3FN | BCNF | Observación o excepción |
+|---|---|---|---|---|---|---|---|
+| `proveedor` | id_proveedor | `id_proveedor → todos`; `identificacion → id_proveedor` | Sí | Sí | Sí | Sí | Sin observaciones. |
+| `lote_leche` | id_lote_leche | `id_lote_leche → todos`; `codigo → id_lote_leche` | Sí | Sí | Sí | Sí | `volumen_disponible_litros` es dato de estado; `dictamen_microbiologico` y `estado_lote` son derivados (5.2). |
+| `silo` | id_silo | `id_silo → todos`; `codigo → id_silo` | Sí | Sí | Sí | Sí | `volumen_actual` es dato de estado (5.2). |
+| `tanque` | id_tanque | `id_tanque → todos`; `codigo → id_tanque` | Sí | Sí | Sí | Sí | `volumen_actual` es dato de estado (5.2). |
+| `insumo` | id_insumo | `id_insumo → todos`; `codigo → id_insumo`; posible `categoria_insumo → unidad_medida` | Sí | Sí | Sí* | Sí* | *Condicionado a que la unidad sea propia de cada insumo (5.5). |
+| `lote_insumo` | id_lote_insumo | `id_lote_insumo → todos`; `codigo_lote_insumo → id_lote_insumo` | Sí | Sí | Sí | Sí | `cantidad_disponible` es un dato derivado (5.2). |
+| `empleado` | id_empleado | `id_empleado → todos`; `identificacion → id_empleado` | Sí | Sí | Sí | Sí | Sin observaciones. |
+| `lote_produccion` | id_lote_produccion | `id_lote_produccion → todos`; `codigo → id_lote_produccion` | Sí | Sí | Sí | Sí | `estado` es derivado en parte (5.2); relación con `envasado` revisada en 5.4. |
+| `estandar_calidad` | id_estandar | `id_estandar → todos`; `(tipo_producto, parametro, etapa, vigente_desde) → id_estandar`; `parametro → unidad_medida` | Sí | Sí | **No** | **No** | `unidad_medida` depende del parámetro. Excepción justificada (5.1). |
+| `prueba_calidad` | id_prueba_calidad | `id_prueba_calidad → todos` | Sí | Sí | Sí | Sí | Cumple 3FN; `resultado` no es derivable del valor (5.3). |
+| `envasado` | id_envasado | `id_envasado → todos` | Sí | Sí | Sí | Sí | Sin observaciones. |
+| `descarte` | id_lote_produccion | `id_lote_produccion → todos` | Sí | Sí | Sí | Sí | Entidad débil: su clave es la del lote. |
+| `almacena` | id_almacena | `id_almacena → todos` | Sí | Sí | Sí | Sí | Sin observaciones. |
+| `uso_tanque` | id_uso_tanque | `id_uso_tanque → todos` | Sí | Sí | Sí | Sí | `estado_uso` se deriva de `fecha_hora_fin` (5.2). |
+| `consumo_insumo` | id_consumo_insumo | `id_consumo_insumo → todos` | Sí | Sí | Sí | Sí | Clave propia: cada consumo se guarda por separado (5.6). |
+| `asigna` | id_asigna | `id_asigna → todos` | Sí | Sí | Sí | Sí | Sin observaciones. |
 
 **Resultado:** 15 de las 16 tablas están en BCNF (una de ellas, `insumo`, bajo un supuesto que se documenta). Una tabla, `estandar_calidad`, no cumple 3FN/BCNF y se mantiene como excepción justificada.
 
-## 3. Dependencias funcionales por tabla
+## 3. Detalle de las dependencias funcionales
 
 **proveedor** — Claves candidatas: `id_proveedor`, `identificacion`.
 - `id_proveedor → nombre, ubicacion, telefono, tipo_proveedor, identificacion, estado`
@@ -57,7 +56,7 @@ Notación: `A → B` significa que el valor de A determina el valor de B. Las cl
 **insumo** — Claves candidatas: `id_insumo`, `codigo`.
 - `id_insumo → codigo, categoria_insumo, unidad_medida, estado`
 - `codigo → id_insumo`
-- Posible dependencia `categoria_insumo → unidad_medida` (ver 4.3).
+- Posible dependencia `categoria_insumo → unidad_medida` (ver 5.5).
 
 **lote_insumo** — Claves candidatas: `id_lote_insumo`, `codigo_lote_insumo`.
 - `id_lote_insumo → codigo_lote_insumo, cantidad_inicial, cantidad_disponible, fecha_recepcion, fecha_caducidad, estado, id_insumo, id_proveedor`
@@ -77,7 +76,7 @@ Notación: `A → B` significa que el valor de A determina el valor de B. Las cl
 - `id_estandar → tipo_producto, parametro, etapa, unidad_medida, valor_minimo_permitido, valor_maximo_permitido, vigente_desde, vigente_hasta`
 - `(tipo_producto, parametro, etapa, vigente_desde) → id_estandar` (y todos los demás atributos)
 - `parametro → unidad_medida` (con los dominios del diccionario: el pH es adimensional, la temperatura va en grados Celsius, la acidez en grados Dornic, etc.)
-- El último determinante no es clave: es lo que impide 3FN/BCNF (ver 4.1).
+- El último determinante no es clave: es lo que impide 3FN/BCNF (ver 5.1).
 
 **prueba_calidad** — Clave candidata: `id_prueba_calidad`.
 - `id_prueba_calidad → fecha_hora, tipo_prueba, valor_obtenido, resultado, origen_registro, id_lote_produccion, id_lote_leche, id_responsable_registro, id_estandar`
@@ -90,40 +89,68 @@ Notación: `A → B` significa que el valor de A determina el valor de B. Las cl
 **descarte** — Clave primaria: `id_lote_produccion` (entidad débil: su clave es la del lote).
 - `id_lote_produccion → fecha_hora_descarte, motivo, volumen_descartado, observaciones`
 
-**almacena** — Claves candidatas: `id_almacena` y `(id_lote_leche, id_silo, fecha_hora, tipo_movimiento)`.
+**almacena** — Clave primaria: `id_almacena`.
 - `id_almacena → id_lote_leche, id_silo, fecha_hora, tipo_movimiento, volumen_litros, observaciones`
 - `tipo_movimiento` no determina otros atributos.
 
-**uso_tanque** — Claves candidatas: `id_uso_tanque` y `(id_tanque, id_lote_produccion, fecha_hora_inicio)`.
+**uso_tanque** — Clave primaria: `id_uso_tanque`.
 - `id_uso_tanque → id_tanque, id_lote_produccion, fecha_hora_inicio, fecha_hora_fin, estado_uso`
 
-**consumo_insumo** — Claves candidatas: `id_consumo_insumo` y `(id_lote_insumo, id_lote_produccion, fecha_hora_consumo)`.
+**consumo_insumo** — Clave primaria: `id_consumo_insumo`.
 - `id_consumo_insumo → id_lote_insumo, id_lote_produccion, cantidad_consumida, fecha_hora_consumo`
-- La clave primaria es de una sola columna: la 2FN se cumple de forma automática.
 
-**asigna** — Claves candidatas: `id_asigna` y `(id_silo_origen, id_tanque_destino, id_lote_produccion, fecha_hora_asignacion)`.
+**asigna** — Clave primaria: `id_asigna`.
 - `id_asigna → id_silo_origen, id_tanque_destino, id_lote_produccion, volumen_asignado_litros, fecha_hora_asignacion`
 
-## 4. Hallazgos y excepciones justificadas
+## 4. Claves compuestas y claves candidatas alternativas
 
-### 4.1. `estandar_calidad` no cumple 3FN/BCNF (excepción deliberada)
+**Ninguna tabla tiene clave primaria compuesta.** Las cuatro intermedias (`almacena`, `uso_tanque`, `consumo_insumo`, `asigna`) llevan clave propia, y `descarte` usa una sola columna (`id_lote_produccion`). Por eso la 2FN se cumple de forma automática en las 16 tablas.
+
+En su lugar se revisaron las claves candidatas alternativas:
+
+| Tabla | Clave candidata alternativa | ¿Declarada en el esquema? |
+|---|---|---|
+| `proveedor`, `empleado` | `identificacion` | Sí (`UNIQUE`) |
+| `lote_leche`, `silo`, `tanque`, `insumo`, `lote_produccion` | `codigo` | Sí (`UNIQUE`) |
+| `lote_insumo` | `codigo_lote_insumo` | Sí (`UNIQUE`) |
+| `estandar_calidad` | `(tipo_producto, parametro, etapa, vigente_desde)` | No: solo existe el índice único parcial del estándar vigente |
+
+Las intermedias también tienen combinaciones naturales que identifican un registro (por ejemplo `(id_tanque, id_lote_produccion, fecha_hora_inicio)` en `uso_tanque`), pero no están declaradas como `UNIQUE` y ninguna dependencia funcional las usa como determinante, así que no afectan la normalización. Declararlas es opcional: evitaría registros duplicados por error.
+
+## 5. Hallazgos y excepciones justificadas
+
+### 5.1. `estandar_calidad` no cumple 3FN/BCNF (excepción deliberada)
+
+`docs/06` (sección 6) ya declara esta tabla como "No cumple 3FN estricta" y la acepta por ser un catálogo pequeño. Aquí se evalúa si esa excepción se sostiene.
 
 **Qué pasa:** `parametro` determina `unidad_medida` y no es clave de la tabla. Hay una dependencia transitiva (`id_estandar → parametro → unidad_medida`): la misma unidad se repite en cada versión, producto y etapa del mismo parámetro.
 
-**Decisión:** mantener la tabla como está, como excepción documentada.
+**Decisión:** la excepción se sostiene; se mantiene la tabla como está.
 
 **Justificación:**
 1. **Es un catálogo pequeño.** Son unas pocas decenas de filas, así que la repetición de la unidad es mínima.
 2. **La unidad es una propiedad estable de la magnitud.** El pH siempre es adimensional y la temperatura siempre va en grados Celsius; no cambia con el tiempo, así que no hay riesgo de anomalía de actualización.
-3. **Separarla cuesta más de lo que aporta.** Una tabla `parametro_calidad` sería la tabla 17, cambiaría el diagrama EER y los Módulos 4 a 6, y obligaría a una reunión más en cada consulta de alertas, para guardar un dato que nunca cambia.
+3. **Separarla cuesta más de lo que aporta.** Una tabla `parametro` sería la tabla 17, cambiaría el diagrama EER y los Módulos 4 a 6, y obligaría a una reunión más en cada consulta de alertas, para guardar un dato que nunca cambia.
 
 **Mitigación:** un `CHECK` que ate cada parámetro con su única unidad válida (`ph` con `adimensional`, `temperatura` con `grados_celsius`, `acidez_dornic` con `grados_dornic`, `grasa` con `porcentaje`, `viscosidad` con `cp`, `microorganismos` con `ufc_ml`). Con él, no puede existir una combinación inconsistente y la redundancia no genera anomalías.
 
-**Alternativa si el grupo prefiere 3FN estricta:** crear `parametro_calidad (parametro, unidad_medida)` y que `estandar_calidad` apunte a ella con una FK.
+**Alternativa si el grupo prefiere 3FN estricta:** crear `parametro (parametro, unidad_medida)` y que `estandar_calidad` apunte a ella con una FK.
 
-### 4.2. Datos derivados y datos de estado
+### 5.2. Datos derivados y datos de estado (discrepancia entre `docs/06` y `docs/07`)
 
-**Datos derivados (se pueden calcular con las tablas actuales y se conservan por rapidez):**
+**La discrepancia:** `docs/06` (sección 6) dice que `silo.volumen_actual`, `tanque.volumen_actual` y `lote_leche.volumen_disponible_litros` se pueden calcular; `docs/07` (sección 5) dice que no.
+
+**Resolución:** prevalece `docs/07`. Con las tablas actuales esas tres columnas **no se pueden calcular**:
+
+| Columna | Por qué no se puede calcular |
+|---|---|
+| `tanque.volumen_actual` | Ninguna tabla registra la leche que sale del tanque. |
+| `silo.volumen_actual` | Depende de las salidas de `almacena`, y hoy nadie las registra cuando la leche pasa al tanque, porque `asigna` no lleva el lote de leche. |
+| `lote_leche.volumen_disponible_litros` | Misma razón que `silo.volumen_actual`. |
+
+Son **datos de estado**: guardan información que no existe en otro lugar, así que no son redundancia y no rompen ninguna forma normal. Los mantiene un trigger en la Entrega 3. Por eso la sección 6 de `docs/06` debe corregirse (ver sección 6 de este documento).
+
+**Datos derivados (sí se pueden calcular con las tablas actuales):**
 
 | Tabla.columna | Cómo se calcula | Por qué se conserva |
 |---|---|---|
@@ -132,19 +159,26 @@ Notación: `A → B` significa que el valor de A determina el valor de B. Las cl
 | `lote_leche.estado_lote` | Dictamen y volumen disponible; derivable solo en parte, porque un dictamen `aprobado` puede ser `disponible` o `agotado` | Filtra rápido la leche utilizable. |
 | `lote_produccion.estado` | Último resultado de las pruebas y existencia de envasado o descarte; derivable solo en parte (el "reproceso" y el descarte directo dependen de decisiones) | RN-03 y RN-06 lo consultan constantemente. |
 | `uso_tanque.estado_uso` | `activo` si `fecha_hora_fin` está vacía | Claridad en las consultas. |
-| `estandar_calidad.vigente_hasta` | Un día antes de la `vigente_desde` de la versión siguiente | Hace falta una columna que marque cuál estándar sigue vigente para el índice único parcial. |
+| `estandar_calidad.vigente_hasta` | Un día antes de la `vigente_desde` de la versión siguiente | Hace falta una columna que marque cuál estándar sigue vigente para el índice único parcial. No figura en `docs/07`, sección 5: conviene agregarla. |
 
-**Datos de estado (no se pueden calcular con las tablas actuales):**
+Las derivadas dependen de la clave de su propia tabla, así que tampoco rompen una forma normal. El riesgo es de mantenimiento: pueden desincronizarse de sus fuentes. Se protegen con `CHECK` ahora (`docs/07`, sección 6) y con triggers en la Entrega 3.
 
-| Tabla.columna | Por qué no se puede calcular |
-|---|---|
-| `tanque.volumen_actual` | Ninguna tabla registra la leche que sale del tanque. |
-| `silo.volumen_actual` | Depende de las salidas de `almacena`, y hoy nadie las registra cuando la leche pasa al tanque, porque `asigna` no lleva el lote de leche. |
-| `lote_leche.volumen_disponible_litros` | Misma razón que `silo.volumen_actual`. |
+### 5.3. `prueba_calidad`: `resultado` no es derivable del valor
 
-Ninguna de estas columnas rompe una forma normal: las derivadas dependen de la clave de su propia tabla, y las de estado guardan información que no existe en otro lugar, por lo que no son redundancia. El riesgo es de mantenimiento: las derivadas pueden desincronizarse de sus fuentes y las de estado dependen de que un trigger (Entrega 3) las actualice. Se protegen con `CHECK` ahora (ver `docs/07`, sección 6).
+Con `parametro_medido` y `unidad_medida` en el estándar, la tabla cumple 3FN. Queda verificar si `resultado` se podría calcular a partir de `valor_obtenido`: no.
 
-### 4.3. `insumo`: dependencia transitiva condicionada
+1. Comparar el valor con los límites exige leer `estandar_calidad`, otra tabla; dentro de `prueba_calidad` no hay una dependencia funcional entre `valor_obtenido` y `resultado`.
+2. `resultado` incluye `reproceso`, que es una decisión del técnico y no sale de los números.
+
+Por eso `resultado` es un atributo propio de la prueba y no hay dependencia transitiva.
+
+### 5.4. `lote_produccion`: `volumen_producido_litros` frente a `envasado`
+
+`volumen_producido_litros` está en litros; `envasado.cantidad_envasada` está en unidades de una presentación (por ejemplo botellas de 1 L). Una no se puede calcular desde la otra: el tamaño de cada presentación no se guarda como número, y el envasado tiene mermas. Además, el volumen producido se mide en el tanque, antes de envasar.
+
+Conclusión: son dos mediciones independientes, no hay redundancia ni dependencia funcional entre tablas, y la tabla queda en BCNF. Una coherencia útil (que lo envasado no supere lo producido) es una validación para la Entrega 3, no un problema de normalización.
+
+### 5.5. `insumo`: dependencia transitiva condicionada
 
 Si cada categoría tuviera una unidad fija (por ejemplo, todas las pulpas en kg y todos los cultivos en gramos), entonces `categoria_insumo → unidad_medida` sería una dependencia transitiva (`id_insumo → categoria_insumo → unidad_medida`) y la tabla no estaría en 3FN.
 
@@ -152,29 +186,24 @@ Si cada categoría tuviera una unidad fija (por ejemplo, todas las pulpas en kg 
 
 **Si el grupo decide lo contrario:** se separaría `categoria_insumo (categoria_insumo, unidad_medida)` y `insumo` guardaría solo la categoría. **Pendiente de confirmar con el grupo.**
 
-### 4.4. Hallazgos de la versión anterior que ya quedaron resueltos
+### 5.6. Verificaciones sin hallazgo
 
-| Tabla | Hallazgo anterior | Cómo quedó |
+Tres decisiones de diseño del esquema evitan problemas de normalización:
+
+| Tabla | Decisión | Efecto |
 |---|---|---|
-| `prueba_calidad` | No cumplía 3FN/BCNF porque repetía unidad y límites por parámetro (se había aceptado como excepción por el histórico). | Los límites y la unidad se movieron a `estandar_calidad`, y el histórico se conserva con la vigencia (`vigente_desde` y `vigente_hasta`). La tabla quedó en BCNF; la dependencia se trasladó a `estandar_calidad` (4.1), donde es menor. |
-| `consumo_insumo` | La clave compuesta permitía un solo registro por pareja de lotes. | Tiene clave propia (`id_consumo_insumo`): cada consumo se guarda por separado. Al ser de una sola columna, la 2FN se cumple. |
-| `descarte` | Se recomendaba `UNIQUE (id_lote_produccion)` con una clave propia. | La clave primaria es la del lote (entidad débil), que ya garantiza un descarte como máximo por lote. |
+| `prueba_calidad` | Los límites y la unidad están en `estandar_calidad`, con vigencia (`vigente_desde` y `vigente_hasta`). | Se evita repetir límites en cada prueba y el histórico se conserva. |
+| `consumo_insumo` | Tiene clave propia (`id_consumo_insumo`). | Cada consumo se guarda por separado; no hay dependencias parciales. |
+| `descarte` | Su clave primaria es la del lote. | Garantiza un descarte como máximo por lote, sin una columna de clave extra. |
 
-## 5. Ajustes sugeridos para las migraciones y decisiones pendientes
-
-Los ajustes de la versión anterior ya están en `docs/07-diccionario-datos.md` (sección 6: `CHECK`, índices únicos parciales y triggers) o quedaron obsoletos por los cambios de la sección 4.4. Lo que sigue abierto:
+## 6. Ajustes sugeridos y decisiones pendientes
 
 | # | Tabla | Ajuste o decisión | Módulo |
 |---|---|---|---|
-| 1 | `estandar_calidad` | Agregar el `CHECK` que ata cada parámetro con su unidad (sección 4.1). Si el grupo prefiere 3FN estricta, crear `parametro_calidad`. | 2 y 7 |
-| 2 | `almacena` y `asigna` | Definir quién registra las salidas de `almacena` cuando la leche pasa al tanque, o agregar `id_lote_leche` a `asigna`. Sin eso, los datos de estado de la sección 4.2 no se pueden mantener ni verificar. | Grupo; afecta a 1, 2, 3 (supuesto 19) y 7 |
-| 3 | `insumo` | Confirmar la decisión de la sección 4.3. | Grupo |
-| 4 | `estandar_calidad` | Confirmar la vigencia con `vigente_desde` y `vigente_hasta` (D13). | Grupo |
+| 1 | `estandar_calidad` | Agregar el `CHECK` que ata cada parámetro con su unidad (5.1). Si el grupo prefiere 3FN estricta, crear la tabla `parametro`. | 1 y 7 |
+| 2 | `estandar_calidad` | Agregar `UNIQUE (tipo_producto, parametro, etapa, vigente_desde)` para que no existan dos versiones que empiecen el mismo día (sección 4). | 1 |
+| 3 | `docs/06`, sección 6 | Corregir la afirmación de que `silo.volumen_actual`, `tanque.volumen_actual` y `lote_leche.volumen_disponible_litros` se pueden calcular (5.2). | Junior (autor de `docs/06`) |
+| 4 | `docs/07`, sección 5 | Agregar `estandar_calidad.vigente_hasta` a la lista de datos derivados (5.2). | 7 |
+| 5 | `almacena` y `asigna` | Definir quién registra las salidas de `almacena` cuando la leche pasa al tanque, o agregar `id_lote_leche` a `asigna`. Sin eso, los datos de estado de 5.2 no se pueden mantener ni verificar. | Grupo; afecta a 1, 2, 3 (supuesto 19 de `docs/03`) y 7 |
+| 6 | `insumo` | Confirmar la decisión de 5.5. | Grupo |
 
-## 6. Conclusiones
-
-1. El esquema está bien normalizado: 15 de las 16 tablas están en BCNF, y las tablas intermedias resuelven correctamente las relaciones M:N y la ternaria sin esconder datos repetidos.
-2. Los cambios del grupo mejoraron la normalización: la excepción de `prueba_calidad` desapareció al crear `estandar_calidad`, y las claves de `consumo_insumo` y `descarte` quedaron alineadas con el diseño.
-3. La única excepción es `estandar_calidad`, con una dependencia menor (`parametro → unidad_medida`) en un catálogo pequeño, controlada con un `CHECK`.
-4. Las columnas derivadas y de estado son una redundancia o un estado consciente para tener el estado al instante; su consistencia se protege con restricciones ahora y con triggers en la Entrega 3.
-5. Quedan tres decisiones del grupo (4.3, la vigencia y quién registra las salidas de `almacena`) que no cambian la estructura general, solo puntos concretos del esquema.
