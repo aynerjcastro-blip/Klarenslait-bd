@@ -7,7 +7,8 @@
 ## 1. Convenciones
 
 - Nombres de tablas y columnas en `snake_case`.
-- Llaves primarias numéricas: `INTEGER` generado automáticamente (`GENERATED ALWAYS AS IDENTITY`). Se abrevian como "INTEGER (identity)".
+- Llaves primarias autogeneradas: se declaran como `SERIAL PRIMARY KEY` en los scripts. PostgreSQL almacena un `INTEGER` y utiliza una secuencia para generar el identificador cuando se omite o se usa `DEFAULT` al insertar. Se abrevian como "INTEGER (SERIAL)".
+- Excepción: `descarte.id_lote_produccion` es `INTEGER`, llave primaria y foránea. No se genera automáticamente; utiliza el identificador del lote de producción descartado.
 - Fechas con hora: `TIMESTAMPTZ`. Solo fecha: `DATE`.
 - Volúmenes en litros: `NUMERIC(12,2)`. Cantidades de insumos: `NUMERIC(12,3)`. Valores medidos y límites de calidad: `NUMERIC(12,4)`.
 - Todas las llaves foráneas usan `ON DELETE RESTRICT`: no se puede borrar un registro al que otro hace referencia (apoya RN-08). El detalle de políticas está en `docs/06`, sección 7.
@@ -17,7 +18,7 @@
 - **Dato de estado / dato derivado:** ver sección 5.
 - **Dato personal:** columna que identifica o permite contactar a una persona (ver sección 7).
 - **†** Valor propuesto en este diccionario; si el Módulo 6 ya define el valor, se usa el del Módulo 6.
-- Los tipos son los **previstos**; se confirman con el DDL cuando exista.
+- Los tipos y mecanismos de generación de identificadores se documentan según los scripts SQL de `sql/migrations/`.
 
 ## 2. Índice de tablas
 
@@ -48,7 +49,7 @@ Persona, finca o empresa que suministra leche cruda y otros insumos a la planta.
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_proveedor` | INTEGER (identity) | NO | PK | Identificador interno del proveedor. | Generado automáticamente. | `3` |
+| `id_proveedor` | INTEGER (SERIAL) | NO | PK | Identificador interno del proveedor. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `3` |
 | `nombre` | VARCHAR(120) | NO | | Nombre de la finca, empresa o persona. Dato personal cuando es persona natural. | | `Finca La Esperanza` |
 | `ubicacion` | VARCHAR(150) | NO | | Lugar de origen del suministro (vereda y municipio); permite rastrear la procedencia de la leche. | | `Vereda El Placer, Codazzi` |
 | `telefono` | VARCHAR(20) | SÍ | | Teléfono de contacto. Dato personal. | | `3105550142` |
@@ -62,7 +63,7 @@ Cantidad identificable de leche cruda recibida de un proveedor, con su dictamen 
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_lote_leche` | INTEGER (identity) | NO | PK | Identificador interno del lote de leche. | Generado automáticamente. | `412` |
+| `id_lote_leche` | INTEGER (SERIAL) | NO | PK | Identificador interno del lote de leche. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `412` |
 | `codigo` | VARCHAR(30) | NO | UK | Código con el que se identifica el lote en la planta. | Único. | `LL-2026-0412` |
 | `fecha_recepcion` | TIMESTAMPTZ | NO | | Fecha y hora en que llegó la leche. Desde esta fecha corre el plazo de conservación de sus pruebas (RN-08). | | `2026-03-14 05:40` |
 | `volumen_inicial_litros` | NUMERIC(12,2) | NO | | Litros recibidos. | Mayor que 0. | `8500.00` |
@@ -77,7 +78,7 @@ Contenedor físico de recepción y acopio de leche cruda.
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_silo` | INTEGER (identity) | NO | PK | Identificador interno del silo. | Generado automáticamente. | `2` |
+| `id_silo` | INTEGER (SERIAL) | NO | PK | Identificador interno del silo. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `2` |
 | `codigo` | VARCHAR(20) | NO | UK | Código del silo en la planta (la planta tiene 6). | Único. | `SIL-02` |
 | `tipo_silo` | VARCHAR(20) | NO | | Función del silo. | `recepcion`, `acopio` † | `acopio` |
 | `capacidad_maxima` | NUMERIC(12,2) | NO | | Litros que puede almacenar. | Mayor que 0. | `25000.00` |
@@ -90,7 +91,7 @@ Equipo físico donde se procesa un lote de producción; puede ser de fermentaci�
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_tanque` | INTEGER (identity) | NO | PK | Identificador interno del tanque. | Generado automáticamente. | `3` |
+| `id_tanque` | INTEGER (SERIAL) | NO | PK | Identificador interno del tanque. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `3` |
 | `codigo` | VARCHAR(20) | NO | UK | Código del tanque en la planta. | Único. | `TQ-03` |
 | `tipo_tanque` | VARCHAR(20) | NO | | Función del tanque. El de mezcla es el tanque secundario donde se añade el sabor (supuesto 2). | `fermentacion`, `mezcla` † | `fermentacion` |
 | `capacidad_maxima` | NUMERIC(12,2) | NO | | Litros que puede contener. No puede superarse con las asignaciones de leche (RN-07). | Mayor que 0. | `5000.00` |
@@ -103,7 +104,7 @@ Catálogo de tipos de materia prima adicional que se usa en la producción.
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_insumo` | INTEGER (identity) | NO | PK | Identificador interno del tipo de insumo. | Generado automáticamente. | `7` |
+| `id_insumo` | INTEGER (SERIAL) | NO | PK | Identificador interno del tipo de insumo. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `7` |
 | `codigo` | VARCHAR(30) | NO | UK | Código del insumo en el catálogo. | Único. | `INS-PUL-FRE` |
 | `categoria_insumo` | VARCHAR(30) | NO | | Familia a la que pertenece el insumo. | `cultivo_lactico`, `pulpa_fruta`, `saborizante`, `material_empaque` † | `pulpa_fruta` |
 | `unidad_medida` | VARCHAR(20) | NO | | Unidad en que se mide este insumo. Es propia de cada insumo, no de la categoría. | `kg`, `g`, `l`, `ml`, `unidad` † | `kg` |
@@ -115,7 +116,7 @@ Recepción concreta de un insumo, con su cantidad y su fecha de caducidad.
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_lote_insumo` | INTEGER (identity) | NO | PK | Identificador interno del lote de insumo. | Generado automáticamente. | `21` |
+| `id_lote_insumo` | INTEGER (SERIAL) | NO | PK | Identificador interno del lote de insumo. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `21` |
 | `codigo_lote_insumo` | VARCHAR(30) | NO | UK | Código del lote que trae el insumo. | Único. | `PF-2026-018` |
 | `cantidad_inicial` | NUMERIC(12,3) | NO | | Cantidad recibida, en la unidad del insumo. | Mayor que 0. | `200.000` |
 | `cantidad_disponible` | NUMERIC(12,3) | NO | | Cantidad que aún queda sin consumir. **Dato derivado:** inicial menos la suma de `consumo_insumo.cantidad_consumida` (RN-10). | Entre 0 y `cantidad_inicial`. | `135.500` |
@@ -131,7 +132,7 @@ Persona que interviene en la producción como operador, técnico de calidad o su
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_empleado` | INTEGER (identity) | NO | PK | Identificador interno del empleado. | Generado automáticamente. | `4` |
+| `id_empleado` | INTEGER (SERIAL) | NO | PK | Identificador interno del empleado. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `4` |
 | `nombre` | VARCHAR(120) | NO | | Nombre completo. Dato personal. | | `Laura Mendoza` |
 | `cargo` | VARCHAR(30) | NO | | Función que cumple; determina qué puede registrar (RN-09). | `operador_tanque`, `tecnico_calidad`, `supervisor` | `tecnico_calidad` |
 | `identificacion` | VARCHAR(20) | NO | UK | Cédula del empleado. Dato personal. | Única. | `1065000000` |
@@ -143,7 +144,7 @@ Unidad trazable de producto elaborado durante un ciclo de producción.
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_lote_produccion` | INTEGER (identity) | NO | PK | Identificador interno del lote. | Generado automáticamente. | `150` |
+| `id_lote_produccion` | INTEGER (SERIAL) | NO | PK | Identificador interno del lote. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `150` |
 | `codigo` | VARCHAR(30) | NO | UK | Código del lote que se imprime y se sigue en la planta. | Único. | `YOG-2026-0150` |
 | `tipo_producto` | VARCHAR(20) | NO | | Producto que se elabora. | `yogurt`, `queso`, `suero`, `avena`, `leche_uht` | `yogurt` |
 | `volumen_planificado_litros` | NUMERIC(12,2) | NO | | Litros que se planea producir. | Mayor que 0. | `4000.00` |
@@ -159,7 +160,7 @@ Límites permitidos de un parámetro de calidad para un producto y una etapa, co
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_estandar` | INTEGER (identity) | NO | PK | Identificador interno del estándar. | Generado automáticamente. | `12` |
+| `id_estandar` | INTEGER (SERIAL) | NO | PK | Identificador interno del estándar. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `12` |
 | `tipo_producto` | VARCHAR(20) | NO | | Producto al que aplica el límite. | Los valores de `lote_produccion.tipo_producto` y `leche_cruda` † | `yogurt` |
 | `parametro` | VARCHAR(20) | NO | | Magnitud que se mide. | `ph`, `temperatura`, `acidez_dornic`, `grasa`, `viscosidad`, `microorganismos` | `ph` |
 | `etapa` | VARCHAR(20) | NO | | Momento del proceso en que se mide. | `recepcion`, `fermentacion`, `mezcla`, `envasado` | `fermentacion` |
@@ -175,7 +176,7 @@ Registro de una medición o análisis de calidad. Pertenece a un lote de producc
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_prueba_calidad` | INTEGER (identity) | NO | PK | Identificador interno de la prueba. | Generado automáticamente. | `3301` |
+| `id_prueba_calidad` | INTEGER (SERIAL) | NO | PK | Identificador interno de la prueba. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `3301` |
 | `fecha_hora` | TIMESTAMPTZ | NO | | Momento en que se tomó la medición. Con la serie de mediciones se calculan las alertas (RN-04). | | `2026-03-14 11:15` |
 | `tipo_prueba` | VARCHAR(25) | NO | | Clase de prueba. Las de laboratorio las registra solo un Técnico de calidad (RN-09). | `microbiologica`, `fisicoquimica`, `ph_linea`, `temperatura_linea` | `ph_linea` |
 | `valor_obtenido` | NUMERIC(12,4) | NO | | Valor medido, en la unidad del estándar. | | `4.3500` |
@@ -192,7 +193,7 @@ Registro del proceso final de empaque de un lote aprobado. Un lote puede tener v
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_envasado` | INTEGER (identity) | NO | PK | Identificador interno del registro de envasado. | Generado automáticamente. | `88` |
+| `id_envasado` | INTEGER (SERIAL) | NO | PK | Identificador interno del registro de envasado. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `88` |
 | `fecha_hora_envasado` | TIMESTAMPTZ | NO | | Momento del envasado. La del último registro es la fecha de cierre del lote. | | `2026-03-15 08:10` |
 | `presentacion` | VARCHAR(30) | NO | | Empaque utilizado. | `bolsa_150g`, `botella_1l`, `garrafa` † | `botella_1l` |
 | `cantidad_envasada` | INTEGER | NO | | Unidades empacadas de esa presentación. | Mayor que 0. | `1500` |
@@ -224,7 +225,7 @@ Movimiento de leche de un lote hacia o desde un silo. Con estos movimientos se c
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_almacena` | INTEGER (identity) | NO | PK | Identificador interno del movimiento. | Generado automáticamente. | `905` |
+| `id_almacena` | INTEGER (SERIAL) | NO | PK | Identificador interno del movimiento. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `905` |
 | `id_lote_leche` | INTEGER | NO | FK → `lote_leche(id_lote_leche)` | Lote de leche que se mueve. Debe tener dictamen `aprobado` para entrar (RN-01). | | `412` |
 | `id_silo` | INTEGER | NO | FK → `silo(id_silo)` | Silo que recibe o entrega la leche. | | `2` |
 | `fecha_hora` | TIMESTAMPTZ | NO | | Momento del movimiento. | | `2026-03-14 06:05` |
@@ -238,7 +239,7 @@ Uso de un tanque por un lote de producción, con su inicio y su fin. Un lote pue
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_uso_tanque` | INTEGER (identity) | NO | PK | Identificador interno del uso. | Generado automáticamente. | `210` |
+| `id_uso_tanque` | INTEGER (SERIAL) | NO | PK | Identificador interno del uso. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `210` |
 | `id_tanque` | INTEGER | NO | FK → `tanque(id_tanque)` | Tanque ocupado. | Un solo uso activo por tanque (RN-06). | `3` |
 | `id_lote_produccion` | INTEGER | NO | FK → `lote_produccion(id_lote_produccion)` | Lote que ocupa el tanque. | Un solo tanque activo por lote. | `150` |
 | `fecha_hora_inicio` | TIMESTAMPTZ | NO | | Momento en que el lote entra al tanque. | | `2026-03-14 07:00` |
@@ -251,7 +252,7 @@ Cada consumo, total o parcial, de un lote de insumo en un lote de producción. U
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_consumo_insumo` | INTEGER (identity) | NO | PK | Identificador interno del consumo. | Generado automáticamente. | `640` |
+| `id_consumo_insumo` | INTEGER (SERIAL) | NO | PK | Identificador interno del consumo. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `640` |
 | `id_lote_insumo` | INTEGER | NO | FK → `lote_insumo(id_lote_insumo)` | Lote de insumo que se consume. | | `21` |
 | `id_lote_produccion` | INTEGER | NO | FK → `lote_produccion(id_lote_produccion)` | Lote de producción que lo usa. | | `150` |
 | `cantidad_consumida` | NUMERIC(12,3) | NO | | Cantidad usada en este consumo, en la unidad del insumo. No puede superar la disponible (RN-10). | Mayor que 0. | `64.500` |
@@ -263,7 +264,7 @@ Transferencia de leche desde un silo hacia un tanque para un lote de producción
 
 | Columna | Tipo | ¿Nulo? | Clave | Significado de negocio | Dominio y restricciones | Ejemplo |
 |---|---|---|---|---|---|---|
-| `id_asigna` | INTEGER (identity) | NO | PK | Identificador interno de la asignación. | Generado automáticamente. | `330` |
+| `id_asigna` | INTEGER (SERIAL) | NO | PK | Identificador interno de la asignación. | Generado por una secuencia al omitir el identificador o usar DEFAULT en el INSERT. | `330` |
 | `id_silo_origen` | INTEGER | NO | FK → `silo(id_silo)` | Silo de origen de la leche. | | `2` |
 | `id_tanque_destino` | INTEGER | NO | FK → `tanque(id_tanque)` | Tanque de destino. | | `3` |
 | `id_lote_produccion` | INTEGER | NO | FK → `lote_produccion(id_lote_produccion)` | Lote para el que se asigna la leche. Debe tener un uso activo de ese tanque en `uso_tanque` (RN-12). | | `150` |
