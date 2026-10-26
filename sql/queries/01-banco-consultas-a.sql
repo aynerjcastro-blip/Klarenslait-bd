@@ -69,9 +69,11 @@ WHERE resultado = 'RECHAZADO'
 
 
 -- -------------------------------------------------------------------------
--- 6. CONSULTA DE FILTRADO DE MATERIA PRIMA POR ESTADO DE VALIDACIÓN
--- Seleccionar los lotes de leche cruda que han sido aprobados en la recepción.
+-- 6. VISTA CREADA Y LUEGO CONSULTADA (Operación con vistas)
+-- Creación de una vista para aislar lotes de leche aprobados y consulta posterior.
 -- -------------------------------------------------------------------------
+-- Paso A: Definición y creación de la vista
+CREATE OR REPLACE VIEW vw_lotes_leche_aprobados AS
 SELECT 
     id_lote_leche,
     id_proveedor,
@@ -79,6 +81,13 @@ SELECT
     ph_registrado
 FROM lote_leche_cruda
 WHERE estado_validacion = 'APROBADO';
+
+-- Paso B: Consulta ejecutada sobre la vista generada
+SELECT 
+    id_lote_leche,
+    volumen_litros,
+    ph_registrado
+FROM vw_lotes_leche_aprobados;
 
 
 -- -------------------------------------------------------------------------
@@ -94,3 +103,4 @@ SELECT
 FROM lote_leche_cruda
 WHERE ph_registrado < 6.40 
    OR ph_registrado > 6.80;
+
