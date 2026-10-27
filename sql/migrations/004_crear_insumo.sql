@@ -1,23 +1,18 @@
--- Migración 004: insumo
-BEGIN;
+begin;
 
-CREATE TABLE insumo (
-    id_insumo         INTEGER GENERATED ALWAYS AS IDENTITY,
-    codigo            VARCHAR(30) NOT NULL,
-    categoria_insumo  VARCHAR(20) NOT NULL,
-    unidad_medida     VARCHAR(10) NOT NULL,
-    estado            VARCHAR(10) NOT NULL DEFAULT 'activo',
-
-    CONSTRAINT pk_insumo
-        PRIMARY KEY (id_insumo),
-    CONSTRAINT uq_insumo_codigo
-        UNIQUE (codigo),
-    CONSTRAINT ck_insumo_categoria_insumo
-        CHECK (categoria_insumo IN ('cultivo_lactico', 'pulpa_fruta', 'saborizante', 'material_empaque')),
-    CONSTRAINT ck_insumo_unidad_medida
-        CHECK (unidad_medida IN ('kg', 'g', 'l', 'ml', 'unidad')),
-    CONSTRAINT ck_insumo_estado
-        CHECK (estado IN ('activo', 'inactivo'))
+create table insumo(
+    id_insumo serial primary key,
+    codigo varchar(30) not null
+	                constraint insumo_codigo_unico unique,
+    categoria_insumo varchar(30) not null
+	                          constraint insumo_categoria_insumo_valida 
+							      check(categoria_insumo in ('Cultivo_lactico', 'Pulpa_fruta', 'Saborizante', 'Material_empaque')),
+    unidad_medida varchar(20) not null
+	                       constraint insumo_unidad_medida_valida 
+						       check(unidad_medida in ('Kg', 'G', 'L', 'Ml', 'Unidad')),
+    estado varchar(20) not null default 'Activo'
+	                constraint insumo_estado_valido 
+					    check(estado in ('Activo', 'Inactivo'))
 );
 
-COMMIT;
+commit;

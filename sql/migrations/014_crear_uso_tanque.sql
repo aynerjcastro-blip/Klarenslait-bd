@@ -18,12 +18,5 @@ create table uso_tanque (
         check ((estado_uso = 'Activo') = (fecha_hora_fin is null))
 );
 
--- rn-06: un solo uso activo por tanque.
-create unique index uq_uso_tanque_activo_por_tanque
-    on uso_tanque (id_tanque) where fecha_hora_fin is null;
-
--- un lote está en un solo tanque a la vez.
-create unique index uq_uso_tanque_activo_por_lote
-    on uso_tanque (id_lote_produccion) where fecha_hora_fin is null;
 
 commit;

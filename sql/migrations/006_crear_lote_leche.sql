@@ -1,41 +1,34 @@
--- Migración 006: lote_leche
-BEGIN;
+begin;
 
-CREATE TABLE lote_leche (
-    id_lote_leche              INTEGER GENERATED ALWAYS AS IDENTITY,
-    codigo                     VARCHAR(30)   NOT NULL,
-    fecha_recepcion            TIMESTAMPTZ   NOT NULL,
-    volumen_inicial_litros     NUMERIC(12,2) NOT NULL,
-    volumen_disponible_litros  NUMERIC(12,2) NOT NULL,
-    dictamen_microbiologico    VARCHAR(10)   NOT NULL DEFAULT 'pendiente',
-    estado_lote                VARCHAR(10)   NOT NULL DEFAULT 'recibido',
-    id_proveedor_origen        INTEGER       NOT NULL,
-
-    CONSTRAINT pk_lote_leche
-        PRIMARY KEY (id_lote_leche),
-    CONSTRAINT uq_lote_leche_codigo
-        UNIQUE (codigo),
-    CONSTRAINT fk_lote_leche_proveedor
-        FOREIGN KEY (id_proveedor_origen) REFERENCES proveedor (id_proveedor)
-        ON DELETE RESTRICT,
-    CONSTRAINT ck_lote_leche_dictamen
-        CHECK (dictamen_microbiologico IN ('pendiente', 'aprobado', 'rechazado')),
-    CONSTRAINT ck_lote_leche_estado_lote
-        CHECK (estado_lote IN ('recibido', 'disponible', 'agotado', 'rechazado')),
-    CONSTRAINT ck_lote_leche_volumen_inicial_positivo
-        CHECK (volumen_inicial_litros > 0),
-    CONSTRAINT ck_lote_leche_volumen_disponible_no_negativo
-        CHECK (volumen_disponible_litros >= 0),
-    CONSTRAINT ck_lote_leche_disponible_no_supera_inicial
-        CHECK (volumen_disponible_litros <= volumen_inicial_litros),
-    CONSTRAINT ck_lote_leche_disponible_exige_dictamen_aprobado
-        CHECK (estado_lote <> 'disponible' OR dictamen_microbiologico = 'aprobado'),
-    CONSTRAINT ck_lote_leche_disponible_con_litros
-        CHECK (estado_lote <> 'disponible' OR volumen_disponible_litros > 0),
-    CONSTRAINT ck_lote_leche_agotado_sin_litros
-        CHECK (estado_lote <> 'agotado' OR volumen_disponible_litros = 0),
-    CONSTRAINT ck_lote_leche_dictamen_rechazado_implica_rechazado
-        CHECK (dictamen_microbiologico <> 'rechazado' OR estado_lote = 'rechazado')
+create table lote_leche(
+    id_lote_leche serial primary key,
+    codigo varchar(30) not null 
+	                constraint lote_leche_codigo_unico unique,
+    fecha_recepcion timestamptz not null,
+    volumen_inicial_litros numeric(12,2) not null
+	                                  constraint lote_leche_volumen_inicial_mayor_que_cero
+									      check(volumen_inicial_litros > 0),
+    volumen_disponible_litros numeric(12,2) not null
+	                                     constraint lote_leche_volumen_disponible_no_negativo
+										     check(volumen_disponible_litros >= 0),
+    dictamen_microbiologico varchar(20) not null default 'Pendiente' 
+	                                 constraint lote_leche_dictamen_valido
+									     check(dictamen_microbiologico in ('Pendiente', 'Aprobado', 'Rechazado')),
+    estado_lote varchar(20) not null default 'Recibido' 
+	                     constraint lote_leche_estado_lote_valido
+						     check(estado_lote in ('Recibido', 'Disponible', 'Agotado', 'Rechazado')),
+    id_proveedor_origen integer not null 
+	                     references proveedor(id_proveedor) on delete restrict,
+    constraint lote_leche_volumen_disponible_no_mayor_que_inicial
+	           check(volumen_disponible_litros <= volumen_inicial_litros),
+	constraint lote_leche_disponible_exige_dictamen_aprobado
+	           check(not (estado_lote = 'Disponible' and dictamen_microbiologico != 'Aprobado')),
+	constraint lote_leche_disponible_exige_litros
+	           check(not (estado_lote = 'Disponible' and volumen_disponible_litros <= 0)),
+	constraint lote_leche_agotado_exige_cero_litros
+	           check(not (estado_lote = 'Agotado' and volumen_disponible_litros != 0)),
+	constraint lote_leche_dictamen_rechazado_exige_estado_rechazado
+	           check(not (dictamen_microbiologico = 'Rechazado' and estado_lote != 'Rechazado'))
 );
 
-COMMIT;
+commit;
