@@ -28,7 +28,7 @@ INSERT INTO silo (
     tipo_silo, 
     capacidad_maxima, 
     volumen_actual, 
-    tado_ooOperativo)
+    estado_operativo)
 VALUES
 (1, 'SIL-REC-01', 'Recepcion', 20000.00, 3200.00, 'Operativo'),
 (2, 'SIL-REC-02', 'Recepcion', 15000.00, 4000.00, 'Operativo'),
