@@ -107,13 +107,13 @@ INSERT INTO estandar_calidad (
     vigente_desde, 
     vigente_hasta)
 VALUES
--- Historial cerrado: temperatura de leche cruda en recepcion
-(1, 'Leche_cruda', 'Temperatura', 'recepcion', 'Grados_celsius', 2.0000, 7.0000, '2025-01-01', '2026-06-30'),
+-- Historial cerrado: temperatura de leche cruda en Recepcion
+(1, 'Leche_cruda', 'Temperatura', 'Recepcion', 'Grados_celsius', 2.0000, 7.0000, '2025-01-01', '2026-06-30'),
 
 -- Estandares vigentes de leche cruda
-(2, 'Leche_cruda', 'Temperatura', 'recepcion', 'Grados_celsius', 2.0000, 6.0000, '2026-07-01', NULL),
-(3, 'Leche_cruda', 'Acidez_dornic', 'recepcion', 'Grados_dornic', 14.0000, 18.0000, '2026-07-01', NULL),
-(4, 'Leche_cruda', 'Microorganismos', 'recepcion', 'Ufc_ml', 0.0000, 100000.0000, '2026-07-01', NULL),
+(2, 'Leche_cruda', 'Temperatura', 'Recepcion', 'Grados_celsius', 2.0000, 6.0000, '2026-07-01', NULL),
+(3, 'Leche_cruda', 'Acidez_dornic', 'Recepcion', 'Grados_dornic', 14.0000, 18.0000, '2026-07-01', NULL),
+(4, 'Leche_cruda', 'Microorganismos', 'Recepcion', 'Ufc_ml', 0.0000, 100000.0000, '2026-07-01', NULL),
 
 -- Historial cerrado de yogurt en fermentacion
 (5, 'Yogurt', 'Ph', 'Fermentacion', 'Adimensional', 4.4000, 4.8000, '2025-06-01', '2026-05-31'),
