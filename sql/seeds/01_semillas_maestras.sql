@@ -28,14 +28,14 @@ INSERT INTO silo (
     tipo_silo, 
     capacidad_maxima, 
     volumen_actual, 
-    estado_operativo)
+    tado_ooOperativo)
 VALUES
-(1, 'SIL-REC-01', 'Recepcion', 20000.00, 3200.00, 'operativo'),
-(2, 'SIL-REC-02', 'Recepcion', 15000.00, 4000.00, 'operativo'),
-(3, 'SIL-ACO-01', 'Acopio',    25000.00,    0.00, 'operativo'),
-(4, 'SIL-ACO-02', 'Acopio',    18000.00, 1800.00, 'operativo'),
-(5, 'SIL-ACO-03', 'Acopio',    30000.00,    0.00, 'en_mantenimiento'),
-(6, 'SIL-REC-03', 'Recepcion', 22000.00, 6400.00, 'operativo');
+(1, 'SIL-REC-01', 'Recepcion', 20000.00, 3200.00, 'Operativo'),
+(2, 'SIL-REC-02', 'Recepcion', 15000.00, 4000.00, 'Operativo'),
+(3, 'SIL-ACO-01', 'Acopio',    25000.00,    0.00, 'Operativo'),
+(4, 'SIL-ACO-02', 'Acopio',    18000.00, 1800.00, 'Operativo'),
+(5, 'SIL-ACO-03', 'Acopio',    30000.00,    0.00, 'En_mantenimiento'),
+(6, 'SIL-REC-03', 'Recepcion', 22000.00, 6400.00, 'Operativo');
 
 -- ----------------------------------------------------------
 -- TANQUE: 5 registros; el tanque 5 no tendra historial de uso
@@ -46,7 +46,7 @@ INSERT INTO tanque (
     tipo_tanque, 
     capacidad_maxima, 
     volumen_actual, 
-    estado_operativo)
+    tado_ooOperativo)
 VALUES
 (1, 'TQ-FER-01', 'Fermentacion', 5000.00,    0.00, 'Operativo'),
 (2, 'TQ-FER-02', 'Fermentacion', 6000.00,    0.00, 'Operativo'),
