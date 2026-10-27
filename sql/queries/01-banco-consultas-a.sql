@@ -1,106 +1,114 @@
+
+
 -- -------------------------------------------------------------------------
--- 1. CONSULTA DE SELECCIÓN Y PROYECCIÓN BÁSICA EN PROVEEDORES
--- Filtrar los proveedores que se encuentran con estado activo en el sistema.
+-- 1. CONSULTA DE PROVEEDORES ACTIVOS
+-- Filtrar los proveedores que se encuentran con estado 'Activo' y son tipo Finca o Empresa.
 -- -------------------------------------------------------------------------
-SELECT 
-    id_proveedor,
-    nombre,
-    contacto,
-    telefono
+SELECT 
+    id_proveedor,
+    nombre,
+    ubicacion,
+    telefono,
+    tipo_proveedor
 FROM proveedor
-WHERE estado = 'ACTIVO';
+WHERE estado = 'Activo' 
+  AND tipo_proveedor IN ('Finca', 'Empresa');
 
 
 -- -------------------------------------------------------------------------
--- 2. CONSULTA DE FILTRADO POR RANGO NUMÉRICO EN SILOS DE ACOPIO
--- Seleccionar los tanques de acopio cuya capacidad total supere los 15,000 litros.
+-- 2. CONSULTA DE SILOS DE ACOPIO OPERATIVOS
+-- Seleccionar los silos de tipo 'Acopio' que se encuentran en estado 'operativo'.
+-- Nota: en la tabla silo el CHECK usa minúsculas ('operativo'), por eso el literal.
 -- -------------------------------------------------------------------------
-SELECT 
-    id_silo,
-    codigo_silo,
-    capacidad_litros,
-    estado
-FROM silo_acopio
-WHERE capacidad_litros > 15000.00;
+SELECT 
+    id_silo,
+    codigo,
+    capacidad_maxima,
+    volumen_actual,
+    estado_operativo
+FROM silo
+WHERE tipo_silo = 'Acopio' 
+  AND estado_operativo = 'Operativo';
 
 
 -- -------------------------------------------------------------------------
--- 3. CONSULTA DE SELECCIÓN CON MÚLTIPLES CONDICIONES LÓGICAS
--- Identificar los lotes de leche cruda que cumplen con parámetros óptimos 
--- de volumen y temperatura de refrigeración.
+-- 3. CONSULTA DE LOTES DE LECHE PENDIENTES DE DICTAMEN
+-- Identificar los lotes de leche cruda que tienen dictamen microbiológico pendiente.
+-- Nota: el filtro por estado_lote = 'Recibido' refuerza la intención (un lote
+-- con dictamen 'Pendiente' no puede estar 'Disponible' ni 'Agotado' por los CHECK).
 -- -------------------------------------------------------------------------
-SELECT 
-    id_lote_leche,
-    id_proveedor,
-    volumen_litros,
-    temperatura_c,
-    estado_validacion
-FROM lote_leche_cruda
-WHERE volumen_litros >= 3000.00 
-  AND temperatura_c <= 4.50;
+SELECT 
+    id_lote_leche,
+    codigo,
+    fecha_recepcion,
+    volumen_inicial_litros,
+    id_proveedor_origen
+FROM lote_leche
+WHERE dictamen_microbiologico = 'Pendiente' 
+  AND estado_lote = 'Recibido';
 
 
 -- -------------------------------------------------------------------------
--- 4. CONSULTA DE CLASIFICACIÓN POR TIPO DE PRODUCTO EN PRODUCCIÓN
--- Filtrar los registros de lotes correspondientes estrictamente a la línea de yogurt.
+-- 4. CONSULTA DE LOTES DE PRODUCCIÓN DE YOGURT EN PROCESO
+-- Filtrar los lotes de producción de la línea 'Yogurt' que están 'En_proceso'.
 -- -------------------------------------------------------------------------
-SELECT 
-    id_lote_produccion,
-    tipo_producto,
-    fecha_produccion,
-    volumen_producido_litros
+SELECT 
+    id_lote_produccion,
+    codigo,
+    volumen_planificado_litros,
+    fecha_hora_inicio,
+    id_supervisor
 FROM lote_produccion
-WHERE tipo_producto = 'YOGURT';
+WHERE tipo_producto = 'Yogurt' 
+  AND estado = 'En_proceso';
 
 
 -- -------------------------------------------------------------------------
--- 5. CONSULTA DE ANÁLISIS DE CALIDAD CON RECHAZOS Y PATÓGENOS
--- Seleccionar los controles de calidad que resultaron rechazados por presencia de patógenos.
+-- 5. CONSULTA DE ESTÁNDARES DE CALIDAD EN RECEPCIÓN
+-- Seleccionar los parámetros normativos vigentes para la etapa de recepción.
+-- Criterio actual: "vigente" = sin fecha de fin (vigente_hasta IS NULL).
+-- Alternativa si se cargan estándares con vigencia futura:
+--   AND (vigente_hasta IS NULL OR vigente_hasta >= CURRENT_DATE)
 -- -------------------------------------------------------------------------
-SELECT 
-    id_control,
-    id_lote_produccion,
-    resultado,
-    presencia_patogenos,
-    fecha_analisis
-FROM control_calidad
-WHERE resultado = 'RECHAZADO' 
-  AND presencia_patogenos = TRUE;
-
-
--- -------------------------------------------------------------------------
--- 6. VISTA CREADA Y LUEGO CONSULTADA (Operación con vistas)
--- Creación de una vista para aislar lotes de leche aprobados y consulta posterior.
--- -------------------------------------------------------------------------
--- Paso A: Definición y creación de la vista
-CREATE OR REPLACE VIEW vw_lotes_leche_aprobados AS
-SELECT 
-    id_lote_leche,
-    id_proveedor,
-    volumen_litros,
-    ph_registrado
-FROM lote_leche_cruda
-WHERE estado_validacion = 'APROBADO';
-
--- Paso B: Consulta ejecutada sobre la vista generada
-SELECT 
-    id_lote_leche,
-    volumen_litros,
-    ph_registrado
-FROM vw_lotes_leche_aprobados;
+SELECT 
+    id_estandar,
+    tipo_producto,
+    parametro,
+    unidad_medida,
+    valor_minimo_permitido,
+    valor_maximo_permitido
+FROM estandar_calidad
+WHERE etapa = 'Recepcion' 
+  AND vigente_hasta IS NULL;
 
 
 -- -------------------------------------------------------------------------
--- 7. CONSULTA DE FILTRADO POR UMBRAL DE ACIDEZ (pH) EN MATERIA PRIMA
--- Seleccionar lotes de leche cruda cuyos niveles de pH se encuentren fuera 
--- del rango normativo estándar (menores a 6.40 o mayores a 6.80).
+-- 6. CONSULTA DE INSUMOS ACTIVOS DE CATEGORÍA
+-- Seleccionar los insumos activos que correspondan a cultivos lácteos o pulpa de fruta.
 -- -------------------------------------------------------------------------
-SELECT 
-    id_lote_leche,
-    id_proveedor,
-    ph_registrado,
-    fecha_recepcion
-FROM lote_leche_cruda
-WHERE ph_registrado < 6.40 
-   OR ph_registrado > 6.80;
+SELECT 
+    id_insumo,
+    codigo,
+    categoria_insumo,
+    unidad_medida
+FROM insumo
+WHERE estado = 'Activo' 
+  AND categoria_insumo IN ('Cultivo_lactico', 'Pulpa_fruta');
 
+
+-- -------------------------------------------------------------------------
+-- 7. CONSULTA DE REGISTROS DE ENVASADO ABIERTOS
+-- Seleccionar los procesos de envasado en estado 'Abierto' con presentaciones específicas.
+-- Nota: no se limita por fecha; si el volumen crece conviene añadir un rango
+-- (p. ej. fecha_hora_envasado >= CURRENT_DATE - INTERVAL '30 days').
+-- -------------------------------------------------------------------------
+SELECT 
+    id_envasado,
+    fecha_hora_envasado,
+    presentacion,
+    cantidad_envasada,
+    destino,
+    fecha_vencimiento
+FROM envasado
+WHERE estado = 'Abierto' 
+  AND presentacion IN ('Bolsa_150g', 'Botella_1l');
