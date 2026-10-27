@@ -46,7 +46,7 @@ INSERT INTO tanque (
     tipo_tanque, 
     capacidad_maxima, 
     volumen_actual, 
-    tado_ooOperativo)
+    estado_operativo)
 VALUES
 (1, 'TQ-FER-01', 'Fermentacion', 5000.00,    0.00, 'Operativo'),
 (2, 'TQ-FER-02', 'Fermentacion', 6000.00,    0.00, 'Operativo'),
