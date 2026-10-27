@@ -1,100 +1,104 @@
 -- -------------------------------------------------------------------------
--- 1. CONSULTA DE FILTRADO DE EMPLEADOS POR CARGO Y ESTADO
--- Seleccionar el personal activo registrado con el cargo de operador de tanque.
+-- 1. CONSULTA DE EMPLEADOS ACTIVOS POR CARGO Y ROL
+-- Seleccionar el personal activo que desempeña el cargo de operario o técnico.
 -- -------------------------------------------------------------------------
-Select 
+SELECT 
     id_empleado,
     identificacion,
     nombre,
-    cargo
-from empleado
-Where cargo = 'Operador_tanque';
+    cargo,
+    estado
+FROM empleado
+WHERE estado = 'Activo'
+  AND cargo IN ('Operador_tanque', 'Tecnico_calidad');
 
 
 -- -------------------------------------------------------------------------
--- 2. CONSULTA DE INSUMOS DISPONIBLES EN BODEGA POR UNIDAD DE MEDIDA
--- Filtrar los insumos registrados cuya unidad de medida sea litros o kilogramos.
+-- 2. CONSULTA DE TANQUES EN ESTADO DE LIMPIEZA O MANTENIMIENTO
+-- Seleccionar los tanques que no están disponibles por lavado o revisión.
 -- -------------------------------------------------------------------------
-Select 
-    id_insumo,
+SELECT 
+    id_tanque,
     codigo,
-    nombre,
-    unidad_medida
-from insumo
-Where unidad_medida in ('Litros', 'Kg');
+    capacidad_maxima_litros,
+    volumen_actual_litros,
+    estado_operativo
+FROM tanque
+WHERE estado_operativo IN ('Lavado', 'Mantenimiento');
 
 
 -- -------------------------------------------------------------------------
--- 3. CONSULTA DE ENVASADO POR CANAL DE DESTINO MAYORISTA Y VOLUMEN
--- Seleccionar los registros de envasado destinados a canal mayorista con volúmenes significativos.
+-- 3. CONSULTA DE LOTES DE INSUMO PRÓXIMOS A CADUCAR
+-- Seleccionar los lotes de insumos activos con caducidad cercana o sin stock.
 -- -------------------------------------------------------------------------
-Select 
-    id_envasado,
-    id_lote_produccion,
-    codigo_lote_envasado,
-    volumen_envasado_litros,
-    destino,
-    fecha_envasado
-from envasado
-Where destino = 'Mayorista'
-  and volumen_envasado_litros >= 1000.00;
+SELECT 
+    id_lote_insumo,
+    codigo_lote_insumo,
+    id_insumo,
+    cantidad_inicial,
+    cantidad_disponible,
+    fecha_caducidad
+FROM lote_insumo
+WHERE cantidad_disponible < 50.00
+  AND fecha_caducidad >= CURRENT_DATE;
 
 
 -- -------------------------------------------------------------------------
--- 4. CONSULTA DE REGISTROS DE DESCARTE Y MERMAS EN PLANTA
--- Filtrar los eventos de descarte que superen los 100 litros de pérdida.
+-- 4. CONSULTA DE REGISTROS DE DESCARTE Y MERMAS SIGNIFICATIVAS
+-- Filtrar las mermas de producción donde la pérdida superó los 100 litros.
 -- -------------------------------------------------------------------------
-Select 
+SELECT 
     id_lote_produccion,
     volumen_descartado_litros,
-    motivo,
+    motivo_descarte,
+    origen_descarte,
     fecha_hora_registro
-from descarte
-Where volumen_descartado_litros > 100.00;
+FROM descarte
+WHERE volumen_descartado_litros > 100.00;
 
 
 -- -------------------------------------------------------------------------
--- 5. CONSULTA DE TANQUES EN USO ACTIVO EN PLANTA
--- Seleccionar los registros de uso de tanque que se encuentran actualmente activos.
+-- 5. CONSULTA DE REGISTROS DE USO DE TANQUE ACTIVOS EN PLANTA
+-- Seleccionar los usos de tanque que se encuentran en estado 'Activo'.
 -- -------------------------------------------------------------------------
-Select 
+SELECT 
     id_uso_tanque,
     id_tanque,
     id_lote_produccion,
     fecha_hora_inicio,
     estado_uso
-from uso_tanque
-Where estado_uso = 'Activo'
-  and fecha_hora_fin is null;
+FROM uso_tanque
+WHERE estado_uso = 'Activo'
+  AND fecha_hora_fin IS NULL;
 
 
 -- -------------------------------------------------------------------------
--- 6. CONSULTA DE PRUEBAS DE CALIDAD CON RESULTADO APROBADO EN ETAPA DE ENVASADO
--- Seleccionar las evaluaciones de laboratorio aprobadas durante la etapa de envasado.
+-- 6. CONSULTA DE PRUEBAS DE CALIDAD APROBADAS EN ETAPA DE ENVASADO
+-- Seleccionar evaluaciones aprobadas de tipo fisicoquímico o microbiológico.
 -- -------------------------------------------------------------------------
-Select 
+SELECT 
     id_prueba_calidad,
     id_lote_produccion,
     tipo_prueba,
     etapa,
     valor_medido,
     resultado
-from prueba_calidad
-Where etapa = 'Envasado'
-  and resultado = 'Aprobado';
+FROM prueba_calidad
+WHERE etapa = 'Envasado'
+  AND resultado = 'Aprobado';
 
 
 -- -------------------------------------------------------------------------
--- 7. CONSULTA DE LOTES DE INSUMO PRÓXIMOS A CADUCAR O CON BAJA DISPONIBILIDAD
--- Seleccionar los lotes de insumos cuya cantidad disponible sea menor a 50 unidades/litros.
+-- 7. CONSULTA DE DESTINOS DE ENVASADO CANAL MAYORISTA O MINORISTA
+-- Filtrar las entregas de producto terminado canalizadas a clientes masivos.
 -- -------------------------------------------------------------------------
-Select 
-    id_lote_insumo,
-    id_insumo,
-    codigo_lote_insumo,
-    cantidad_inicial,
-    cantidad_disponible,
-    fecha_caducidad
-from lote_insumo
-Where cantidad_disponible < 50.00
-order by cantidad_disponible asc;
+SELECT 
+    id_envasado,
+    id_lote_produccion,
+    presentacion,
+    cantidad_envasada,
+    destino,
+    fecha_vencimiento
+FROM envasado
+WHERE destino IN ('Mayorista', 'Minorista')
+ORDER BY fecha_vencimiento ASC;
