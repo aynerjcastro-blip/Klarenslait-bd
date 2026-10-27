@@ -7,24 +7,24 @@ SELECT
     identificacion,
     nombre,
     cargo,
-    estado
+    estado_vinculacion
 FROM empleado
-WHERE estado = 'Activo'
+WHERE estado_vinculacion = 'Activo'
   AND cargo IN ('Operador_tanque', 'Tecnico_calidad');
 
 
 -- -------------------------------------------------------------------------
--- 2. CONSULTA DE TANQUES EN ESTADO DE LIMPIEZA O MANTENIMIENTO
--- Seleccionar los tanques que no están disponibles por lavado o revisión.
+-- 2. CONSULTA DE TANQUES EN ESTADO DE MANTENIMIENTO O FUERA DE SERVICIO
+-- Seleccionar los tanques no operativos según los estados válidos del CHECK.
 -- -------------------------------------------------------------------------
 SELECT 
     id_tanque,
     codigo,
-    capacidad_maxima_litros,
-    volumen_actual_litros,
+    capacidad_maxima,
+    volumen_actual,
     estado_operativo
 FROM tanque
-WHERE estado_operativo IN ('Lavado', 'Mantenimiento');
+WHERE estado_operativo IN ('En_mantenimiento', 'Fuera_de_servicio');
 
 
 -- -------------------------------------------------------------------------
@@ -45,16 +45,15 @@ WHERE cantidad_disponible < 50.00
 
 -- -------------------------------------------------------------------------
 -- 4. CONSULTA DE REGISTROS DE DESCARTE Y MERMAS SIGNIFICATIVAS
--- Filtrar las mermas de producción donde la pérdida superó los 100 litros.
+-- Filtrar las mermas de producción usando los nombres reales de la tabla descarte.
 -- -------------------------------------------------------------------------
 SELECT 
     id_lote_produccion,
-    volumen_descartado_litros,
-    motivo_descarte,
-    origen_descarte,
-    fecha_hora_registro
+    volumen_descartado,
+    motivo,
+    fecha_hora_descarte
 FROM descarte
-WHERE volumen_descartado_litros > 100.00;
+WHERE volumen_descartado > 100.00;
 
 
 -- -------------------------------------------------------------------------
@@ -73,19 +72,17 @@ WHERE estado_uso = 'Activo'
 
 
 -- -------------------------------------------------------------------------
--- 6. CONSULTA DE PRUEBAS DE CALIDAD APROBADAS EN ETAPA DE ENVASADO
--- Seleccionar evaluaciones aprobadas de tipo fisicoquímico o microbiológico.
+-- 6. CONSULTA DE PRUEBAS DE CALIDAD APROBADAS EN PLANTA
+-- Seleccionar evaluaciones con resultado 'Aprobado' y su valor obtenido real.
 -- -------------------------------------------------------------------------
 SELECT 
     id_prueba_calidad,
     id_lote_produccion,
     tipo_prueba,
-    etapa,
-    valor_medido,
+    valor_obtenido,
     resultado
 FROM prueba_calidad
-WHERE etapa = 'Envasado'
-  AND resultado = 'Aprobado';
+WHERE resultado = 'Aprobado';
 
 
 -- -------------------------------------------------------------------------
