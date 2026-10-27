@@ -1,10 +1,3 @@
--- =========================================================================
--- MÓDULO 4: BANCO DE CONSULTAS — PARTE A
--- Proyecto: Sistema de Gestión y Calidad - Lácteos Klarens (Klarenslait-bd)
--- Responsable Principal: Sebastián Ramos
--- Revisores: Juan Guerra y Alfonso Araujo
--- Enfoque estricto en consultas de selección (SELECT) basadas en el curso.
--- =========================================================================
 
 -- -------------------------------------------------------------------------
 -- 1. CONSULTA DE SELECCIÓN Y PROYECCIÓN BÁSICA EN PROVEEDORES
