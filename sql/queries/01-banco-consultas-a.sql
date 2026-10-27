@@ -28,7 +28,7 @@ SELECT 
     estado_operativo
 FROM silo
 WHERE tipo_silo = 'Acopio' 
-  AND estado_operativo = 'operativo';
+  AND estado_operativo = 'Operativo';
 
 
 -- -------------------------------------------------------------------------
