@@ -78,7 +78,7 @@ SELECT 
     valor_minimo_permitido,
     valor_maximo_permitido
 FROM estandar_calidad
-WHERE etapa = 'recepcion' 
+WHERE etapa = 'Recepcion' 
   AND vigente_hasta IS NULL;
 
 
