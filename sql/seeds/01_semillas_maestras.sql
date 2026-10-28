@@ -30,12 +30,12 @@ INSERT INTO silo (
     volumen_actual, 
     estado_operativo)
 VALUES
-(1, 'SIL-REC-01', 'Recepcion', 20000.00, 3200.00, 'operativo'),
-(2, 'SIL-REC-02', 'Recepcion', 15000.00, 4000.00, 'operativo'),
-(3, 'SIL-ACO-01', 'Acopio',    25000.00,    0.00, 'operativo'),
-(4, 'SIL-ACO-02', 'Acopio',    18000.00, 1800.00, 'operativo'),
-(5, 'SIL-ACO-03', 'Acopio',    30000.00,    0.00, 'en_mantenimiento'),
-(6, 'SIL-REC-03', 'Recepcion', 22000.00, 6400.00, 'operativo');
+(1, 'SIL-REC-01', 'Recepcion', 20000.00, 3200.00, 'Operativo'),
+(2, 'SIL-REC-02', 'Recepcion', 15000.00, 4000.00, 'Operativo'),
+(3, 'SIL-ACO-01', 'Acopio',    25000.00,    0.00, 'Operativo'),
+(4, 'SIL-ACO-02', 'Acopio',    18000.00, 1800.00, 'Operativo'),
+(5, 'SIL-ACO-03', 'Acopio',    30000.00,    0.00, 'En_mantenimiento'),
+(6, 'SIL-REC-03', 'Recepcion', 22000.00, 6400.00, 'Operativo');
 
 -- ----------------------------------------------------------
 -- TANQUE: 5 registros; el tanque 5 no tendra historial de uso
@@ -107,13 +107,13 @@ INSERT INTO estandar_calidad (
     vigente_desde, 
     vigente_hasta)
 VALUES
--- Historial cerrado: temperatura de leche cruda en recepcion
-(1, 'Leche_cruda', 'Temperatura', 'recepcion', 'Grados_celsius', 2.0000, 7.0000, '2025-01-01', '2026-06-30'),
+-- Historial cerrado: temperatura de leche cruda en Recepcion
+(1, 'Leche_cruda', 'Temperatura', 'Recepcion', 'Grados_celsius', 2.0000, 7.0000, '2025-01-01', '2026-06-30'),
 
 -- Estandares vigentes de leche cruda
-(2, 'Leche_cruda', 'Temperatura', 'recepcion', 'Grados_celsius', 2.0000, 6.0000, '2026-07-01', NULL),
-(3, 'Leche_cruda', 'Acidez_dornic', 'recepcion', 'Grados_dornic', 14.0000, 18.0000, '2026-07-01', NULL),
-(4, 'Leche_cruda', 'Microorganismos', 'recepcion', 'Ufc_ml', 0.0000, 100000.0000, '2026-07-01', NULL),
+(2, 'Leche_cruda', 'Temperatura', 'Recepcion', 'Grados_celsius', 2.0000, 6.0000, '2026-07-01', NULL),
+(3, 'Leche_cruda', 'Acidez_dornic', 'Recepcion', 'Grados_dornic', 14.0000, 18.0000, '2026-07-01', NULL),
+(4, 'Leche_cruda', 'Microorganismos', 'Recepcion', 'Ufc_ml', 0.0000, 100000.0000, '2026-07-01', NULL),
 
 -- Historial cerrado de yogurt en fermentacion
 (5, 'Yogurt', 'Ph', 'Fermentacion', 'Adimensional', 4.4000, 4.8000, '2025-06-01', '2026-05-31'),
