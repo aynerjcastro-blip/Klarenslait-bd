@@ -4,6 +4,7 @@ KlarensLait es un proyecto de aula orientado al diseño de una base de datos par
 
 El proyecto parte del análisis de la operación de una planta procesadora de lácteos y busca estructurar la información generada desde la recepción de leche cruda hasta la obtención de productos terminados. Su propósito es facilitar el seguimiento de lotes, los controles de calidad, el almacenamiento y la consulta histórica de la información asociada a la producción.
 
+---
 
 ## Descripción del proyecto
 
@@ -19,6 +20,7 @@ Cuando esta información se administra de forma dispersa, manual o sin una estru
 
 KlarensLait propone una solución basada en una base de datos relacional que permita organizar estos datos de forma consistente, consultable y trazable.
 
+---
 
 ## Problema que aborda
 
@@ -35,11 +37,13 @@ La ausencia de una estructura de datos adecuada puede generar dificultades para:
 - Preparar información para revisiones, auditorías o controles internos.
 - Detectar y analizar desviaciones de calidad.
 
+---
 
 ## Objetivo general
 
 Diseñar una base de datos relacional para la gestión de trazabilidad y control de calidad en procesos de producción láctea, permitiendo registrar, relacionar y consultar información desde la recepción de leche cruda hasta el producto terminado.
 
+---
 
 ## Objetivos específicos
 
@@ -52,7 +56,7 @@ Diseñar una base de datos relacional para la gestión de trazabilidad y control
 - Elaborar consultas que permitan rastrear materias primas, lotes, análisis y controles de proceso.
 - Documentar las decisiones tomadas durante el desarrollo del proyecto.
 
-
+---
 
 ## Alcance inicial
 
@@ -70,6 +74,7 @@ La primera versión de KlarensLait se enfoca en los procesos informativos relaci
 
 El alcance puede ampliarse posteriormente con funcionalidades relacionadas con inventario, mantenimiento de maquinaria, gestión de usuarios, despachos, clientes, devoluciones, alertas, reportes avanzados e integración con sensores industriales.
 
+---
 
 ## Fuera del alcance inicial
 
@@ -87,7 +92,7 @@ Para mantener el proyecto controlado, la primera versión no contempla de forma 
 
 Estas funcionalidades pueden considerarse como trabajo futuro.
 
-
+---
 
 ## Contexto de referencia
 
@@ -95,11 +100,13 @@ El análisis inicial se basa en información documental sobre los procesos de un
 
 La información documental se utiliza como punto de partida para el modelado. Los valores operativos, límites de calidad, tiempos, temperaturas, responsabilidades y procesos específicos deberán validarse antes de considerarse reglas definitivas del sistema.
 
+---
 
 ## Enfoque de la solución
 
 KlarensLait se plantea como una base de datos relacional que permita conservar una relación verificable entre:
 
+```text
 Proveedor
     ↓
 Recepción de leche
@@ -111,6 +118,7 @@ Muestras y análisis de calidad
 Almacenamiento y procesamiento
     ↓
 Lote de producto terminado
+```
 
 Este enfoque permite consultar tanto la trazabilidad hacia atrás como la trazabilidad hacia adelante.
 
@@ -133,7 +141,7 @@ Permite partir de un lote de leche o de una recepción y conocer:
 - Qué controles se realizaron durante su transformación.
 - Qué información debe revisarse ante un hallazgo de calidad.
 
-
+---
 
 ## Tecnologías previstas
 
@@ -145,31 +153,30 @@ Permite partir de un lote de leche o de una recepción y conocer:
 | GitHub | Repositorio, documentación y seguimiento de cambios. |
 | Draw.io | Elaboración de diagramas entidad–relación y otros modelos. |
 
-
 ---
 
 ## Estructura del repositorio
 
+```text
 KlarensLait/
-│
-├── README.md
-│
-├── diagrams/
-│   └── 
-│
-├── docs/
-│   └── 
-│
-├── sql/
-│   └── 
-└── LICENSE
+├── diagrams/        # Diagramas entidad–relación y modelos conceptuales
+├── docs/            # Documentación técnica, requisitos y esquema relacional
+├── sql/             # Scripts para PostgreSQL
+│   ├── migrations/  # Migraciones DDL (definición de tablas y restricciones)
+│   ├── seeds/       # Semillas DML (datos iniciales de prueba)
+│   └── queries/     # Bancos de consultas SQL y trazabilidad
+└── README.md
+```
 
 La estructura puede modificarse durante el desarrollo si el equipo identifica una forma más clara de organizar los artefactos.
 
+---
 
 ## Documentación del proyecto
+
 La documentación detallada se encuentra dentro de la carpeta `docs/`.
 
+---
 
 ## Estado del proyecto
 
@@ -183,9 +190,8 @@ Actividades iniciales:
 - [x] Definición final de reglas de negocio.
 - [x] Elaboración del modelo conceptual.
 - [x] Construcción del diagrama entidad–relación.
-- [ ] Diseño lógico de la base de datos.
-- [ ] Implementación en PostgreSQL.
-- [ ] Carga de datos de prueba.
-- [ ] Desarrollo de consultas de trazabilidad.
-- [ ] Pruebas y documentación final.
-
+- [x] Diseño lógico de la base de datos.
+- [x] Implementación en PostgreSQL.
+- [x] Carga de datos de prueba.
+- [x] Desarrollo de consultas de trazabilidad.
+- [x] Pruebas y documentación final.
